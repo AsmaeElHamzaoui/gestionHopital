@@ -1,21 +1,126 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>org.example</groupId>
   <artifactId>GestionExpertiseMedicale</artifactId>
-  <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>GestionExpertiseMedicale Maven Webapp</name>
-  <url>http://maven.apache.org</url>
+  <packaging>war</packaging>
+
+  <name>GestionHopital Maven Webapp</name>
+
+  <properties>
+    <!--Utilise Java 17 pour compatibilité Jakarta EE 10 -->
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <dependencies>
+
+    <!--Jakarta Servlet API -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>5.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--JSP -->
+    <dependency>
+      <groupId>jakarta.servlet.jsp</groupId>
+      <artifactId>jakarta.servlet.jsp-api</artifactId>
+      <version>3.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--JSTL -->
+    <dependency>
+      <groupId>jakarta.servlet.jsp.jstl</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.web</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+
+    <!--JPA + Hibernate -->
+    <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>6.3.1.Final</version>
+    </dependency>
+
+    <!--JDBC PostgreSQL -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.7.3</version>
+    </dependency>
+
+    <!--Jakarta Security -->
+    <dependency>
+      <groupId>jakarta.security.enterprise</groupId>
+      <artifactId>jakarta.security.enterprise-api</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+
+    <!--Implémentation Soteria -->
+    <dependency>
+      <groupId>org.glassfish.soteria</groupId>
+      <artifactId>jakarta.security.enterprise</artifactId>
+      <version>3.0.4</version>
+    </dependency>
+
+    <!--CDI (pour @Inject, @ApplicationScoped, etc.) -->
+    <dependency>
+      <groupId>jakarta.enterprise</groupId>
+      <artifactId>jakarta.enterprise.cdi-api</artifactId>
+      <version>4.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--Implémentation CDI pour Tomcat (Weld) -->
+    <dependency>
+      <groupId>org.jboss.weld.servlet</groupId>
+      <artifactId>weld-servlet-shaded</artifactId>
+      <version>5.1.1.Final</version>
+    </dependency>
+
+    <!--JUnit -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.10.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>0.4</version>
+    </dependency>
+
   </dependencies>
+
   <build>
-    <finalName>GestionExpertiseMedicale</finalName>
+    <finalName>GestionHopital</finalName>
   </build>
+
 </project>
