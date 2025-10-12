@@ -20,14 +20,13 @@ public class AuthController extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-        // 🔍 Debug: afficher les valeurs reçues
+        // 🔍 Debug
         System.out.println("=== AUTH DEBUG ===");
         System.out.println("Email reçu : " + email);
         System.out.println("Mot de passe reçu : " + password);
 
         User user = service.authenticate(email, password);
 
-        // 🔍 Debug: afficher le résultat de l'authentification
         if (user != null) {
             System.out.println("Utilisateur authentifié : " + user.getEmail());
             System.out.println("Rôle : " + user.getRole());
@@ -36,12 +35,28 @@ public class AuthController extends HttpServlet {
             session.setAttribute("user", user);
             session.setAttribute("userRole", user.getRole().name());
 
-            res.sendRedirect(req.getContextPath() + "/dashboard");
-        } else {
-            System.out.println("⚠️ Authentification échouée : utilisateur non trouvé ou mot de passe incorrect");
+            // 🔹 Redirection selon le rôle
+            switch (user.getRole()) {
+                case INFIRMIER:
+                    res.sendRedirect(req.getContextPath() + "/dashboard-infermier");
+                    break;
+                case GENERALISTE:
+                    res.sendRedirect(req.getContextPath() + "/dashboard-generaliste");
+                    break;
+                case SPECIALISTE:
+                    res.sendRedirect(req.getContextPath() + "/dashboard-specialiste");
+                    break;
+                default:
+                    // Au cas où le rôle n'est pas prévu
+                    res.sendRedirect(req.getContextPath() + "/dashboard");
+                    break;
+            }
 
+        } else {
+            System.out.println("Authentification échouée : utilisateur non trouvé ou mot de passe incorrect");
             req.setAttribute("error", "Email ou mot de passe incorrect");
             req.getRequestDispatcher("/pages/home.jsp").forward(req, res);
         }
     }
+
 }
