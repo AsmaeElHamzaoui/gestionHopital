@@ -29,27 +29,27 @@ public class DashboardInfermierController extends HttpServlet {
         HttpSession session = req.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("user") : null;
 
-        // ✅ Vérification du rôle avec enum
+        // Vérification du rôle avec enum
         if (user == null || user.getRole() != Role.INFIRMIER) {
             res.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
 
-        // 1️⃣ Charger tous les patients
+        // Charger tous les patients
         List<Patient> patients = patientService.getAllPatients();
 
-        // 2️⃣ Charger les signes vitaux pour chaque patient
+        //  Charger les signes vitaux pour chaque patient
         Map<Long, List<SignesVitaux>> signesVitauxMap = new HashMap<>();
         for (Patient p : patients) {
             List<SignesVitaux> signesList = signesVitauxService.getAllSignesVitauxByPatientId(p.getId());
             signesVitauxMap.put(p.getId(), signesList);
         }
 
-        // 3️⃣ Passer les données à la JSP
+        // Passer les données à la JSP
         req.setAttribute("patients", patients);
         req.setAttribute("signesVitauxMap", signesVitauxMap);
 
-        // 4️⃣ Forward vers la page JSP
+        // Forward vers la page JSP
         req.getRequestDispatcher("/pages/dashboard-infermier.jsp").forward(req, res);
     }
 }
