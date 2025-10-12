@@ -21,13 +21,28 @@
 
         <!-- Sélection du patient -->
         <div class="mb-6">
-            <label class="block text-gray-700 font-semibold mb-2">Sélectionner le patient</label>
-            <select name="patientId" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
-                <option value="">Choisir un patient...</option>
-                <c:forEach var="p" items="${patients}">
-                    <option value="${p.id}" ${p.id == signesVitaux.patientId ? 'selected' : ''}>${p.nom} ${p.prenom}</option>
-                </c:forEach>
-            </select>
+            <label class="block text-gray-700 font-semibold mb-2">Patient</label>
+            <c:choose>
+                <c:when test="${not empty signesVitaux.id}">
+                    <!-- En mode modification : affichage seul du nom du patient propriétaire -->
+                    <div class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        <c:forEach var="p" items="${patients}">
+                            <span class="text-gray-700 font-medium">${p.nom} ${p.prenom}</span>
+                            <input type="hidden" name="patientId" value="${p.id}" />
+                        </c:forEach>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">Le patient ne peut pas être modifié pour des signes vitaux existants</p>
+                </c:when>
+                <c:otherwise>
+                    <!-- En mode ajout : dropdown avec tous les patients -->
+                    <select name="patientId" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                        <option value="">Choisir un patient...</option>
+                        <c:forEach var="p" items="${patients}">
+                            <option value="${p.id}" ${p.id == signesVitaux.patientId ? 'selected' : ''}>${p.nom} ${p.prenom}</option>
+                        </c:forEach>
+                    </select>
+                </c:otherwise>
+            </c:choose>
         </div>
 
         <div class="grid grid-cols-2 gap-6">
