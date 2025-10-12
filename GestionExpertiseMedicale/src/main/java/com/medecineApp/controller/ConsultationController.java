@@ -77,6 +77,6 @@ public class ConsultationController extends HttpServlet {
         c.setPatient(patientService.getPatient(patientId));
 
         consultationService.saveConsultation(c);
-        res.sendRedirect("consultations?patientId=" + patientId);
+        res.sendRedirect("dashboard-generaliste");
     }
 }
