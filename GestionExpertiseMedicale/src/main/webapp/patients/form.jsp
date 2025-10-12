@@ -67,9 +67,12 @@
             </div>
 
             <div>
-                <label class="block text-gray-700 font-semibold mb-2">Statut</label>
-                <input type="text" name="statut" value="${patient.statut}"
-                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" />
+                <label class="block text-gray-700 font-semibold mb-2">Priorité</label>
+                <select name="priorite" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+                    <option value="URGENTE" ${patient.priorite == 'URGENTE' ? 'selected' : ''}>Urgente</option>
+                    <option value="NORMALE" ${patient.priorite == 'NORMALE' ? 'selected' : ''}>Normale</option>
+                    <option value="NON_NORMALE" ${patient.priorite == 'NON_NORMALE' ? 'selected' : ''}>Non Normale</option>
+                </select>
             </div>
         </div>
 

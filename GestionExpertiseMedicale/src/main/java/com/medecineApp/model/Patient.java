@@ -1,5 +1,6 @@
 package com.medecineApp.model;
 
+import com.medecineApp.enums.Priorite;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,8 +35,9 @@ public class Patient {
     @Column(name = "date_enregistrement")
     private LocalDate dateEnregistrement;
 
-    @Column(name = "statut")
-    private String statut;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priorite")
+    private Priorite priorite;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SignesVitaux> signesVitaux = new ArrayList<>();
@@ -49,7 +51,7 @@ public class Patient {
 
     // Constructeur avec paramètres
     public Patient(String nom, String prenom, LocalDate dateNaissance, String numSecu, String telephone,
-                   String adresse, LocalDate dateEnregistrement, String statut) {
+                   String adresse, LocalDate dateEnregistrement, Priorite priorite) {
         this.nom = nom;
         this.prenom = prenom;
         this.dateNaissance = dateNaissance;
@@ -57,7 +59,7 @@ public class Patient {
         this.telephone = telephone;
         this.adresse = adresse;
         this.dateEnregistrement = dateEnregistrement;
-        this.statut = statut;
+        this.priorite = priorite;
     }
 
     // Getters et Setters
@@ -125,12 +127,12 @@ public class Patient {
         this.dateEnregistrement = dateEnregistrement;
     }
 
-    public String getStatut() {
-        return statut;
+    public Priorite getPriorite() {
+        return priorite;
     }
 
-    public void setStatut(String statut) {
-        this.statut = statut;
+    public void setPriorite(Priorite priorite) {
+        this.priorite = priorite;
     }
 
     public List<SignesVitaux> getSignesVitaux() {
@@ -161,7 +163,7 @@ public class Patient {
                 ", telephone='" + telephone + '\'' +
                 ", adresse='" + adresse + '\'' +
                 ", dateEnregistrement=" + dateEnregistrement +
-                ", statut='" + statut + '\'' +
+                ", priorite=" + priorite +
                 ", signesVitaux=" + signesVitaux +
                 ", consultations=" + consultations +
                 '}';

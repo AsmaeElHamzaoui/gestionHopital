@@ -1,5 +1,6 @@
 package com.medecineApp.controller;
 
+import com.medecineApp.enums.Priorite;
 import com.medecineApp.model.Patient;
 import com.medecineApp.service.PatientService;
 import jakarta.servlet.ServletException;
@@ -53,7 +54,7 @@ public class PatientController extends HttpServlet {
         p.setTelephone(req.getParameter("telephone"));
         p.setAdresse(req.getParameter("adresse"));
         p.setDateEnregistrement(LocalDate.parse(req.getParameter("dateEnregistrement")));
-        p.setStatut(req.getParameter("statut"));
+        p.setPriorite(Priorite.valueOf(req.getParameter("priorite")));
 
         service.savePatient(p);
         res.sendRedirect("patients");

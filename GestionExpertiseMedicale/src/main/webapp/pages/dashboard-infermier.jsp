@@ -96,7 +96,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléphone</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Adresse</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Enreg.</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                             </tr>
                         </thead>
@@ -111,7 +111,7 @@
                                     <td>${p.telephone}</td>
                                     <td>${p.adresse}</td>
                                     <td>${p.dateEnregistrement}</td>
-                                    <td>${p.statut}</td>
+                                    <td>${p.priorite}</td>
                                     <td class="text-sm text-emerald-600 font-medium">
                                         <a href="javascript:void(0)" onclick="showRegistrationForm(${p.id})" class="hover:underline">Modifier</a> |
                                         <a href="patients?action=delete&id=${p.id}" class="hover:underline text-red-500">Supprimer</a>
@@ -122,43 +122,42 @@
                     </table>
                 </div>
             </div>
-<!-- VUE LISTE PATIENTS AVEC SIGNES VITAUX -->
-<div id="patientsVitalSignsView" class="hidden bg-white rounded-lg shadow-sm">
-    <div class="p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Liste des Patients avec Signes Vitaux</h3>
+            <!-- VUE LISTE PATIENTS AVEC SIGNES VITAUX -->
+            <div id="patientsVitalSignsView" class="hidden bg-white rounded-lg shadow-sm">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Liste des Patients avec Signes Vitaux</h3>
 
-        <div class="space-y-4">
-            <c:forEach var="p" items="${patients}">
-                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h4 class="font-medium text-gray-900">${p.nom} ${p.prenom}</h4>
-                            <p class="text-sm text-gray-500">Né(e) le: ${p.dateNaissance} | Tél: ${p.telephone}</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="showPatientVitalSigns(${p.id})" class="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                </svg>
-                                Voir Signes Vitaux
-                            </button>
-                        </div>
+                    <div class="space-y-4">
+                        <c:forEach var="p" items="${patients}">
+                            <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h4 class="font-medium text-gray-900">${p.nom} ${p.prenom}</h4>
+                                        <p class="text-sm text-gray-500">Né(e) le: ${p.dateNaissance} | Tél: ${p.telephone}</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button onclick="showPatientVitalSigns(${p.id})" class="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                            Voir Signes Vitaux
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
-            </c:forEach>
-        </div>
-    </div>
-</div>
+            </div>
 
+            <div id="registrationFormView" class="hidden">
+                <jsp:include page="../patients/form.jsp" />
+            </div>
 
-             <div id="registrationFormView" class="hidden">
-                 <jsp:include page="../patients/form.jsp" />
-             </div>
-
-             <div id="vitalSignsFormView" class="hidden">
-                 <jsp:include page="../signes-vitaux/form.jsp" />
-             </div>
+            <div id="vitalSignsFormView" class="hidden">
+                <jsp:include page="../signes-vitaux/form.jsp" />
+            </div>
         </main>
     </div>
 
@@ -173,10 +172,9 @@
         document.getElementById('pageTitle').textContent = 'Signes Vitaux des Patients';
     }
 
-   function showPatientVitalSigns(patientId) {
-       // Rediriger vers la page de liste des signes vitaux du patient
-       window.location.href = 'signes-vitaux?action=list&patientId=' + patientId;
-   }
+    function showPatientVitalSigns(patientId) {
+        window.location.href = 'signes-vitaux?action=list&patientId=' + patientId;
+    }
 
     function showPatientList() {
         document.getElementById('registrationFormView').classList.add('hidden');
@@ -208,7 +206,6 @@
 
         if (patientId) {
             document.getElementById('pageTitle').textContent = 'Modifier Signes Vitaux';
-            // Pré-selectionner le patient dans le dropdown
             const select = document.querySelector('select[name="patientId"]');
             if (select) {
                 select.value = patientId;
