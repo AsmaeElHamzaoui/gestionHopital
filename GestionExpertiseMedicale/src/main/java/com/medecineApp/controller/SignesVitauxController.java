@@ -42,7 +42,7 @@ public class SignesVitauxController extends HttpServlet {
             default:
                 req.setAttribute("signesVitauxList", signesVitauxService.getAllSignesVitauxByPatientId(patientId));
                 req.setAttribute("patient", patientService.getPatient(patientId));
-                req.getRequestDispatcher("/pages/dashboard-infermier.jsp").forward(req, res);
+                req.getRequestDispatcher("/signes-vitaux/list.jsp").forward(req, res);
         }
     }
 
