@@ -21,7 +21,7 @@ public class PatientController extends HttpServlet {
         if (action == null) action = "list";
         switch (action) {
             case "new":
-                req.getRequestDispatcher("/patients/form.jsp").forward(req, res);
+                req.getRequestDispatcher("/pages/dashboard-infermier.jsp").forward(req, res);
                 break;
             case "edit":
                 Long id = Long.parseLong(req.getParameter("id"));
@@ -34,7 +34,7 @@ public class PatientController extends HttpServlet {
                 break;
             default:
                 req.setAttribute("patients", service.getAllPatients());
-                req.getRequestDispatcher("/patients/list.jsp").forward(req, res);
+                req.getRequestDispatcher("/pages/dashboard-infermier.jsp").forward(req, res);
         }
     }
 
