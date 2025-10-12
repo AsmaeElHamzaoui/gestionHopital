@@ -45,6 +45,15 @@
                     </svg>
                     Liste Patient
                 </button>
+
+                <!-- NOUVEAU BOUTON - Liste des patients avec signes vitaux -->
+                <button onclick="showPatientsWithVitalSigns()" class="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    Signes Vitaux Patients
+                </button>
+
                 <button class="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -113,6 +122,35 @@
                     </table>
                 </div>
             </div>
+<!-- VUE LISTE PATIENTS AVEC SIGNES VITAUX -->
+<div id="patientsVitalSignsView" class="hidden bg-white rounded-lg shadow-sm">
+    <div class="p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Liste des Patients avec Signes Vitaux</h3>
+
+        <div class="space-y-4">
+            <c:forEach var="p" items="${patients}">
+                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-medium text-gray-900">${p.nom} ${p.prenom}</h4>
+                            <p class="text-sm text-gray-500">Né(e) le: ${p.dateNaissance} | Tél: ${p.telephone}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="showPatientVitalSigns(${p.id})" class="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                Voir Signes Vitaux
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+</div>
+
 
              <div id="registrationFormView" class="hidden">
                  <jsp:include page="../patients/form.jsp" />
@@ -126,18 +164,38 @@
 
     <!-- JS -->
     <script>
+    function showPatientsWithVitalSigns() {
+        document.getElementById('patientListView').classList.add('hidden');
+        document.getElementById('registrationFormView').classList.add('hidden');
+        document.getElementById('vitalSignsFormView').classList.add('hidden');
+        document.getElementById('patientsVitalSignsView').classList.remove('hidden');
+
+        document.getElementById('pageTitle').textContent = 'Signes Vitaux des Patients';
+    }
+
+   function showPatientVitalSigns(patientId) {
+       // Rediriger vers la page de liste des signes vitaux du patient
+       window.location.href = 'signes-vitaux?action=list&patientId=' + patientId;
+   }
+
+    function showPatientList() {
+        document.getElementById('registrationFormView').classList.add('hidden');
+        document.getElementById('vitalSignsFormView').classList.add('hidden');
+        document.getElementById('patientsVitalSignsView').classList.add('hidden');
+        document.getElementById('patientListView').classList.remove('hidden');
+        document.getElementById('pageTitle').textContent = 'Liste des Patients';
+    }
+
     function showRegistrationForm(patientId = null) {
         document.getElementById('patientListView').classList.add('hidden');
-        document.getElementById('registrationFormView').classList.remove('hidden');
         document.getElementById('vitalSignsFormView').classList.add('hidden');
+        document.getElementById('patientsVitalSignsView').classList.add('hidden');
+        document.getElementById('registrationFormView').classList.remove('hidden');
 
         if (patientId) {
-            // Mode modification - charger les données du patient
             document.getElementById('pageTitle').textContent = 'Modifier Patient';
-            // Ici vous devrez charger les données via AJAX ou recharger la page
             window.location.href = 'patients?action=edit&id=' + patientId;
         } else {
-            // Mode ajout
             document.getElementById('pageTitle').textContent = 'Ajouter Patient';
         }
     }
@@ -145,18 +203,23 @@
     function showVitalSignsForm(patientId = null) {
         document.getElementById('patientListView').classList.add('hidden');
         document.getElementById('registrationFormView').classList.add('hidden');
+        document.getElementById('patientsVitalSignsView').classList.add('hidden');
         document.getElementById('vitalSignsFormView').classList.remove('hidden');
 
         if (patientId) {
-            // Mode modification
             document.getElementById('pageTitle').textContent = 'Modifier Signes Vitaux';
+            // Pré-selectionner le patient dans le dropdown
+            const select = document.querySelector('select[name="patientId"]');
+            if (select) {
+                select.value = patientId;
+            }
         } else {
-            // Mode ajout
             document.getElementById('pageTitle').textContent = 'Ajouter Signes Vitaux';
-
-            // Définir la date du jour par défaut
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('dateMesure').value = today;
+            const dateMesure = document.getElementById('dateMesure');
+            if (dateMesure) {
+                dateMesure.value = today;
+            }
         }
     }
     </script>
