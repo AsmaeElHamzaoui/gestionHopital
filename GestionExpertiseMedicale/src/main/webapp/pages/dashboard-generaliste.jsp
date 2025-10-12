@@ -114,9 +114,9 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <button class="px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">
+                                        <a href="consultations?action=newConsultation&patientId=${p.id}" class="px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">
                                             Consulter
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                             </c:forEach>
