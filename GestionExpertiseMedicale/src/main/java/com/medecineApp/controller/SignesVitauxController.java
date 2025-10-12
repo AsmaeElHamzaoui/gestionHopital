@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 @WebServlet("/signes-vitaux")
 public class SignesVitauxController extends HttpServlet {
@@ -21,18 +22,27 @@ public class SignesVitauxController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String action = req.getParameter("action");
-        Long patientId = Long.parseLong(req.getParameter("patientId"));
+        Long patientId = req.getParameter("patientId") != null ? Long.parseLong(req.getParameter("patientId")) : null;
         if (action == null) action = "list";
 
         switch (action) {
             case "new":
+                // Pour l'ajout, on affiche tous les patients
+                req.setAttribute("patients", patientService.getAllPatients());
                 req.setAttribute("patientId", patientId);
                 req.getRequestDispatcher("/pages/dashboard-infermier.jsp").forward(req, res);
                 break;
             case "edit":
                 Long id = Long.parseLong(req.getParameter("id"));
-                req.setAttribute("signesVitaux", signesVitauxService.getSignesVitaux(id));
-                req.setAttribute("patientId", patientId);
+                SignesVitaux signesVitaux = signesVitauxService.getSignesVitaux(id);
+
+                // Pour la modification, on récupère seulement le patient propriétaire
+                Patient patientProprietaire = signesVitaux.getPatient();
+                List<Patient> patients = List.of(patientProprietaire); // Liste avec uniquement le patient propriétaire
+
+                req.setAttribute("signesVitaux", signesVitaux);
+                req.setAttribute("patients", patients);
+                req.setAttribute("patientId", patientProprietaire.getId());
                 req.getRequestDispatcher("/signes-vitaux/form.jsp").forward(req, res);
                 break;
             case "delete":
