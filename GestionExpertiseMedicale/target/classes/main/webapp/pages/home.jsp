@@ -14,6 +14,7 @@
         <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="text-2xl font-bold">Hôpital Santé</div>
             <ul class="flex space-x-6">
+                <li><a href="${pageContext.request.contextPath}/users" class="hover:text-teal-200 transition duration-300">users</a></li>
                 <li><a href="#" class="hover:text-teal-200 transition duration-300">Accueil</a></li>
                 <li><a href="#" class="hover:text-teal-200 transition duration-300">Services</a></li>
                 <li><a href="#" class="hover:text-teal-200 transition duration-300" onclick="openModal()">Login</a></li>
