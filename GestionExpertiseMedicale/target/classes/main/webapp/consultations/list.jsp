@@ -60,13 +60,6 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="mt-6">
-            <a href="consultations?action=new&patientId=${patient.id}"
-               class="bg-emerald-500 text-white px-4 py-2 rounded hover:bg-emerald-600">
-                Nouvelle Consultation
-            </a>
-        </div>
     </div>
 </body>
 </html>

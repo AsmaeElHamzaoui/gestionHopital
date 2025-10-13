@@ -1,10 +1,11 @@
 package com.medecineApp.model;
 
 import com.medecineApp.enums.Role;
+import com.medecineApp.enums.Specialiste;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")  // Adaptez selon votre nom de table
+@Table(name = "users")
 public class User {
 
     @Id
@@ -20,40 +21,28 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    // Constructeur par défaut (obligatoire pour JPA)
+    // Ajout de la spécialité - peut être null pour les non-spécialistes
+    @Enumerated(EnumType.STRING)
+    @Column(name = "specialite", nullable = true)
+    private Specialiste specialite;
+
+    // Constructeurs
     public User() {
     }
 
-    // Constructeur avec paramètres
     public User(String nom, String prenom, String email) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
     }
 
-    // Getters et Setters (TRÈS IMPORTANT : respect de la convention JavaBean)
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
+    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -86,7 +75,30 @@ public class User {
         this.email = email;
     }
 
-    // Optionnel : toString pour le débogage
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Specialiste getSpecialite() {
+        return specialite;
+    }
+
+    public void setSpecialite(Specialiste specialite) {
+        this.specialite = specialite;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -94,6 +106,8 @@ public class User {
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
+                ", role=" + role +
+                ", specialite=" + specialite +
                 '}';
     }
 }
