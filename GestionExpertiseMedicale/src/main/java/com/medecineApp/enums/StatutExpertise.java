@@ -1,7 +1,6 @@
 package com.medecineApp.enums;
 
-public enum StatutPatient {
+public enum StatutExpertise {
     EN_ATTENTE,
-    EN_COURS,
-    TERMINE
+    TERMINEE
     }
