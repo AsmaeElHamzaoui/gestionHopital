@@ -164,11 +164,12 @@
                                                 ${p.priorite}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <a href="consultations?action=viewConsultation&patientId=${p.id}" class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
-                                                Voir Consultation
-                                            </a>
-                                        </td>
+                                       <td class="px-6 py-4 whitespace-nowrap">
+                                           <a href="consultations?action=list&patientId=${p.id}"
+                                              class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
+                                               Voir Consultation
+                                           </a>
+                                       </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
