@@ -37,23 +37,6 @@ public class CreneauJournalierController extends HttpServlet {
         if (action == null) action = "list";
 
         switch (action) {
-            case "new":
-                req.setAttribute("joursSemaine", JourSemaine.values());
-                req.getRequestDispatcher("/creneaux/form.jsp").forward(req, res);
-                break;
-
-            case "edit":
-                Long id = Long.parseLong(req.getParameter("id"));
-                CreneauJournalier creneau = creneauService.getCreneau(id);
-                if (creneau != null && creneau.getSpecialiste().getId().equals(user.getId())) {
-                    req.setAttribute("creneau", creneau);
-                    req.setAttribute("joursSemaine", JourSemaine.values());
-                    req.getRequestDispatcher("/creneaux/form.jsp").forward(req, res);
-                } else {
-                    res.sendError(HttpServletResponse.SC_FORBIDDEN, "Accès non autorisé");
-                }
-                break;
-
             case "delete":
                 Long deleteId = Long.parseLong(req.getParameter("id"));
                 CreneauJournalier creneauToDelete = creneauService.getCreneau(deleteId);
@@ -66,12 +49,12 @@ public class CreneauJournalierController extends HttpServlet {
             case "semaine":
                 req.setAttribute("joursSemaine", JourSemaine.values());
                 req.setAttribute("creneaux", creneauService.getCreneauxBySpecialiste(user.getId()));
-                req.getRequestDispatcher("/creneaux/semaine.jsp").forward(req, res);
+                req.getRequestDispatcher("/pages/dashboard-specialiste.jsp").forward(req, res);
                 break;
 
             default:
                 req.setAttribute("creneaux", creneauService.getCreneauxBySpecialiste(user.getId()));
-                req.getRequestDispatcher("/creneaux/list.jsp").forward(req, res);
+                req.getRequestDispatcher("/pages/dashboard-specialiste.jsp").forward(req, res);
         }
     }
 
@@ -91,12 +74,12 @@ public class CreneauJournalierController extends HttpServlet {
             // Gestion de la saisie de la semaine complète
             traiterSemaineComplete(req, res, user);
         } else {
-            // Gestion d'un créneau individuel
+            // Gestion d'un créneau individuel (add or edit)
             traiterCreneauIndividuel(req, res, user);
         }
     }
 
-    private void traiterCreneauIndividuel(HttpServletRequest req, HttpServletResponse res, User user) throws IOException {
+    private void traiterCreneauIndividuel(HttpServletRequest req, HttpServletResponse res, User user) throws IOException, ServletException {
         String idStr = req.getParameter("id");
 
         CreneauJournalier creneau = new CreneauJournalier();
@@ -109,18 +92,15 @@ public class CreneauJournalierController extends HttpServlet {
         creneau.setHeureDebut(LocalTime.parse(req.getParameter("heureDebut")));
         creneau.setHeureFin(LocalTime.parse(req.getParameter("heureFin")));
         creneau.setDureeConsultationMinutes(Integer.parseInt(req.getParameter("dureeConsultationMinutes")));
-        creneau.setActif(Boolean.parseBoolean(req.getParameter("actif")));
+        creneau.setActif(req.getParameter("actif") != null);
 
         try {
             creneauService.saveCreneau(creneau);
             res.sendRedirect("dashboard-specialiste");
         } catch (IllegalArgumentException e) {
             req.setAttribute("error", e.getMessage());
-            try {
-                req.getRequestDispatcher("/creneaux/form.jsp").forward(req, res);
-            } catch (ServletException ex) {
-                res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
+            req.setAttribute("creneaux", creneauService.getCreneauxBySpecialiste(user.getId()));
+            req.getRequestDispatcher("/pages/dashboard-specialiste.jsp").forward(req, res);
         }
     }
 
@@ -151,9 +131,9 @@ public class CreneauJournalierController extends HttpServlet {
 
         try {
             creneauService.saveCreneauxSemaine(user.getId(), creneaux);
-            res.sendRedirect("dashboard-specialiste");
+            res.sendRedirect("dashboard-specialiste?success=true");
         } catch (Exception e) {
-            res.sendRedirect("creneaux?action=semaine&error=" + e.getMessage());
+            res.sendRedirect("dashboard-specialiste?error=" + e.getMessage());
         }
     }
 }
