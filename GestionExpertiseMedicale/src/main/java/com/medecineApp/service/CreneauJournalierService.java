@@ -8,6 +8,7 @@ import com.medecineApp.repository.UserRepository;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CreneauJournalierService {
     private final CreneauJournalierRepository repo = new CreneauJournalierRepository();
@@ -15,6 +16,13 @@ public class CreneauJournalierService {
 
     public List<CreneauJournalier> getCreneauxBySpecialiste(Long specialisteId) {
         return repo.findBySpecialisteId(specialisteId);
+    }
+
+    public List<CreneauJournalier> getCreneauxSpecialisteNonActif() {
+        return repo.findAll()
+                   .stream()
+                   .filter(c->c.getActif()==true)
+                   .toList();
     }
 
     public List<CreneauJournalier> getCreneauxBySpecialisteAndJour(Long specialisteId, JourSemaine jourSemaine) {
