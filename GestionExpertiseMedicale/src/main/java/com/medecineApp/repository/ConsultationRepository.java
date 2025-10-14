@@ -15,6 +15,12 @@ public class ConsultationRepository {
         em.close();
         return list;
     }
+    public List<Consultation> findAll() {
+        EntityManager em = JpaUtil.getEntityManager();
+        List<Consultation> list = em.createQuery("SELECT c FROM Consultation c", Consultation.class).getResultList();
+        em.close();
+        return list;
+    }
 
     public void save(Consultation c) {
         EntityManager em = JpaUtil.getEntityManager();
