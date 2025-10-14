@@ -328,7 +328,9 @@
                            <select id="specialiste" name="specialiste" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm">
                                <option value="">Sélectionner</option>
                                <c:forEach var="specialiste" items="${specialistes}">
-                                   <option value="${specialiste.id}">Dr. ${specialiste.nom} ${specialiste.prenom}</option>
+                                  <option value="${specialiste.id}" data-specialite="${specialiste.specialite}">
+                                           Dr. ${specialiste.nom} ${specialiste.prenom} (${specialiste.specialite})
+                                  </option>
                                </c:forEach>
                            </select>
                        </div>
@@ -350,7 +352,7 @@
                </div>
 
 
-                        <!-- Spécialiste -->
+                        <!-- date de demande -->
                             <div>
                             <label for="dateDemande" class="block text-xs font-medium text-gray-700 mb-1">Date de demande</label>
                             <select id="dateDemande" name="dateDemande" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm">
@@ -425,5 +427,39 @@
             }
         }
     </script>
+    <script>
+        const selectSpecialite = document.getElementById('specialite');
+        const selectSpecialiste = document.getElementById('specialiste');
+
+        // Stocker toutes les options de base
+        const allOptions = Array.from(selectSpecialiste.options);
+
+        selectSpecialite.addEventListener('change', () => {
+            const selectedSpec = selectSpecialite.value;
+
+            // Vider la liste des spécialistes
+            selectSpecialiste.innerHTML = '';
+
+            // Ajouter l'option par défaut
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Sélectionner';
+            selectSpecialiste.appendChild(defaultOption);
+
+            // Réafficher toutes les options si aucune spécialité n'est choisie
+            if (!selectedSpec) {
+                allOptions.forEach(opt => selectSpecialiste.appendChild(opt));
+                return;
+            }
+
+            // Filtrer les spécialistes selon la spécialité choisie
+            allOptions.forEach(opt => {
+                if (opt.dataset.specialite === selectedSpec) {
+                    selectSpecialiste.appendChild(opt);
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
