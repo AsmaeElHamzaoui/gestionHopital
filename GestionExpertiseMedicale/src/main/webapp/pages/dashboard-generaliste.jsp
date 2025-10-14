@@ -269,38 +269,122 @@
         </main>
     </div>
 
-    <!-- Modal for requesting expertise -->
-    <div id="expertise-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Nouvelle demande d'expertise</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Patient</label>
-                    <select class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
-                        <c:forEach var="p" items="${patients}">
-                            <option value="${p.id}">${p.nom} ${p.prenom}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Spécialité</label>
-                    <select class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
-                        <option value="cardiologie">Cardiologie</option>
-                        <option value="dermatologie">Dermatologie</option>
-                        <option value="neurologie">Neurologie</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500" rows="4"></textarea>
-                </div>
-            </div>
-            <div class="mt-6 flex justify-end gap-3">
-                <button onclick="closeExpertiseModal()" class="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors">Annuler</button>
-                <button class="px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">Soumettre</button>
-            </div>
-        </div>
-    </div>
+   <!-- Modal for requesting expertise -->
+   <div id="expertise-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
+       <div class="bg-white rounded-lg shadow-lg p-4 w-full max-w-3xl max-h-[80vh] overflow-y-auto">
+           <h3 class="text-lg font-bold text-gray-900 mb-4">Demande d'expertise</h3>
+
+           <form id="expertise-form" class="space-y-4">
+               <!-- Section 1: Consultation & Priorité -->
+               <div>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                       <!-- Consultation -->
+                       <div>
+                           <label for="consultation" class="block text-xs font-medium text-gray-700 mb-1">Consultation *</label>
+                           <select id="consultation" name="consultation" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm" required>
+                               <option value="">Sélectionner</option>
+                               <c:forEach var="consultation" items="${consultations}">
+                                   <option value="${consultation.id}">${consultation.motif}</option>
+                               </c:forEach>
+                           </select>
+                       </div>
+
+                       <!-- Priorité -->
+                       <div>
+                           <label for="priorite" class="block text-xs font-medium text-gray-700 mb-1">Priorité</label>
+                           <select id="priorite" name="priorite" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm" required>
+                               <option value="1">Faible</option>
+                               <option value="2" selected>Normale</option>
+                               <option value="3">Élevée</option>
+                               <option value="4">Urgente</option>
+                           </select>
+                       </div>
+                   </div>
+               </div>
+
+               <!-- Section 2: Spécialité & Spécialiste -->
+               <div>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                       <!-- Spécialité -->
+                       <div>
+                           <label for="specialite" class="block text-xs font-medium text-gray-700 mb-1">Spécialité *</label>
+                           <select id="specialite" name="specialite" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm" required>
+                               <option value="">Sélectionner</option>
+                               <option value="CARDIOLOGIE">Cardiologie</option>
+                               <option value="PNEUMOLOGIE">Pneumologie</option>
+                               <option value="NEUROLOGIE">Neurologie</option>
+                               <option value="DERMATOLOGIE">Dermatologie</option>
+                               <option value="GASTROENTEROLOGIE">Gastro-entérologie</option>
+                               <option value="ENDOCRINOLOGIE">Endocrinologie</option>
+                               <option value="PSYCHIATRIE">Psychiatrie</option>
+                               <option value="NEPHROLOGIE">Néphrologie</option>
+                               <option value="ORTHOPEDIE">Orthopédie</option>
+                           </select>
+                       </div>
+
+                       <!-- Spécialiste -->
+                       <div>
+                           <label for="specialiste" class="block text-xs font-medium text-gray-700 mb-1">Spécialiste</label>
+                           <select id="specialiste" name="specialiste" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm">
+                               <option value="">Sélectionner</option>
+                               <c:forEach var="specialiste" items="${specialistes}">
+                                   <option value="${specialiste.id}">Dr. ${specialiste.nom} ${specialiste.prenom}</option>
+                               </c:forEach>
+                           </select>
+                       </div>
+
+                   </div>
+               </div>
+
+               <!-- Section 3: Tarif -->
+               <div>
+                   <div class=" hidden grid grid-cols-1 md:grid-cols-2 gap-3">
+                       <div>
+                           <label for="tarif" class="block text-xs font-medium text-gray-700 mb-1">Tarif (€)</label>
+                           <input type="number" id="tarif" name="tarif" step="0.01" min="0"
+                                  class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm"
+                                  placeholder="0.00">
+                           <p class="text-xs text-gray-500 mt-0.5">Optionnel</p>
+                       </div>
+                   </div>
+               </div>
+
+
+                        <!-- Spécialiste -->
+                            <div>
+                            <label for="dateDemande" class="block text-xs font-medium text-gray-700 mb-1">Date de demande</label>
+                            <select id="dateDemande" name="dateDemande" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm">
+                            <option value="">Sélectionner</option>
+                            <c:forEach var="dateDemande" items="${sdateDemandes}">
+                            <option value="${dateDemande.id}">Dr. ${dateDemande.nom} ${dateDemande.prenom}</option>
+                            </c:forEach>
+                            </select>
+                            </div>
+               <!-- Section 4: Description -->
+               <div>
+                   <div>
+                       <label for="question" class="block text-xs font-medium text-gray-700 mb-1">Question / Description *</label>
+                       <textarea id="question" name="question" rows="3"
+                                 class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm resize-none"
+                                 placeholder="Décrivez la raison de la demande, symptômes, antécédents..." required></textarea>
+                   </div>
+               </div>
+
+           </form>
+
+           <!-- Boutons d'action -->
+           <div class="mt-4 flex justify-end gap-2 pt-4">
+               <button type="button" onclick="closeExpertiseModal()"
+                       class="px-4 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-200 transition-colors">
+                   Annuler
+               </button>
+               <button type="button" onclick="submitExpertise()"
+                       class="px-4 py-1.5 bg-emerald-500 text-white text-xs font-medium rounded-md hover:bg-emerald-600 transition-colors">
+                   Soumettre
+               </button>
+           </div>
+       </div>
+   </div>
 
     <script>
         function showQueue() {
