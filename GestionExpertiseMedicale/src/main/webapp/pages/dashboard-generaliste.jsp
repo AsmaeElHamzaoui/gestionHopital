@@ -47,11 +47,11 @@
                     </svg>
                     <span class="font-medium">Consultations</span>
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-emerald-600 transition-colors">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-emerald-600 transition-colors" onclick="showExpertise()">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                     </svg>
-                    <span class="font-medium">Statistiques</span>
+                    <span class="font-medium">Demande expertise</span>
                 </a>
             </nav>
         </aside>
@@ -164,14 +164,103 @@
                                                 ${p.priorite}
                                             </span>
                                         </td>
-                                       <td class="px-6 py-4 whitespace-nowrap">
-                                           <a href="consultations?action=list&patientId=${p.id}"
-                                              class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
-                                               Voir Consultation
-                                           </a>
-                                       </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <a href="consultations?action=list&patientId=${p.id}" class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
+                                                Voir Consultation
+                                            </a>
+                                        </td>
                                     </tr>
                                 </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="expertise-section" class="hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-900">Demandes d'expertise</h2>
+                    <button onclick="showExpertiseModal()" class="px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">
+                        Demander expertise
+                    </button>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900">Liste des demandes d'expertise</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date de demande</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spécialité</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                                JD
+                                            </div>
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">Jean Dupont</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">2025-10-10</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">Cardiologie</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            En attente
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+                                        <button onclick="editExpertise(1)" class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
+                                            Modifier
+                                        </button>
+                                        <button onclick="deleteExpertise(1)" class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors">
+                                            Supprimer
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                                ML
+                                            </div>
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">Marie Leclerc</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">2025-10-12</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">Neurologie</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Approuvée
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+                                        <button onclick="editExpertise(2)" class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
+                                            Modifier
+                                        </button>
+                                        <button onclick="deleteExpertise(2)" class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors">
+                                            Supprimer
+                                        </button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -180,15 +269,76 @@
         </main>
     </div>
 
+    <!-- Modal for requesting expertise -->
+    <div id="expertise-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Nouvelle demande d'expertise</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Patient</label>
+                    <select class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+                        <c:forEach var="p" items="${patients}">
+                            <option value="${p.id}">${p.nom} ${p.prenom}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Spécialité</label>
+                    <select class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
+                        <option value="cardiologie">Cardiologie</option>
+                        <option value="dermatologie">Dermatologie</option>
+                        <option value="neurologie">Neurologie</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end gap-3">
+                <button onclick="closeExpertiseModal()" class="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors">Annuler</button>
+                <button class="px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">Soumettre</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         function showQueue() {
             document.getElementById('queue-section').classList.remove('hidden');
             document.getElementById('consultations-section').classList.add('hidden');
+            document.getElementById('expertise-section').classList.add('hidden');
         }
 
         function showConsultations() {
             document.getElementById('queue-section').classList.add('hidden');
             document.getElementById('consultations-section').classList.remove('hidden');
+            document.getElementById('expertise-section').classList.add('hidden');
+        }
+
+        function showExpertise() {
+            document.getElementById('queue-section').classList.add('hidden');
+            document.getElementById('consultations-section').classList.add('hidden');
+            document.getElementById('expertise-section').classList.remove('hidden');
+        }
+
+        function showExpertiseModal() {
+            document.getElementById('expertise-modal').classList.remove('hidden');
+        }
+
+        function closeExpertiseModal() {
+            document.getElementById('expertise-modal').classList.add('hidden');
+        }
+
+        function editExpertise(id) {
+            alert('Modifier la demande d\'expertise avec ID: ' + id);
+            // Implémenter la logique pour modifier la demande (par exemple, ouvrir un modal avec les données pré-remplies)
+        }
+
+        function deleteExpertise(id) {
+            if (confirm('Voulez-vous vraiment supprimer la demande d\'expertise avec ID: ' + id + '?')) {
+                alert('Demande d\'expertise avec ID: ' + id + ' supprimée.');
+                // Implémenter la logique pour supprimer la demande
+            }
         }
     </script>
 </body>
