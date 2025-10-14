@@ -1,11 +1,13 @@
 package com.medecineApp.service;
 
+import com.medecineApp.enums.Role;
 import com.medecineApp.model.User;
 import com.medecineApp.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserService {
     private final UserRepository repo = new UserRepository();
@@ -15,6 +17,13 @@ public class UserService {
         return repo.findAll();
     }
 
+    //Récupérer les spécialiste
+    public List<User> getAllSpecialiste() {
+        return repo.findAll()
+                .stream()
+                .filter(u->u.getRole().equals(Role.SPECIALISTE))
+                .collect(Collectors.toList());
+    }
     // Sauvegarder un utilisateur (hachage du mot de passe avant persistance)
     public void saveUser(User u) {
         if (u.getPassword() != null && !u.getPassword().isEmpty()) {
