@@ -4,6 +4,7 @@ import com.medecineApp.enums.Specialiste;
 import com.medecineApp.enums.StatutExpertise;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "demandes_expertise")
@@ -14,7 +15,7 @@ public class DemandeExpertise {
     private Long id;
 
     @Column(name = "date_demande", nullable = false)
-    private LocalDate dateDemande;
+    private LocalDateTime dateDemande;
 
     @Column(name = "question", nullable = false)
     private String question;
@@ -49,7 +50,7 @@ public class DemandeExpertise {
     }
 
     // Constructeur avec paramètres
-    public DemandeExpertise(LocalDate dateDemande, String question, Integer priorite, StatutExpertise statut,
+    public DemandeExpertise(LocalDateTime dateDemande, String question, Integer priorite, StatutExpertise statut,
                             Consultation consultation, Specialiste specialite) {
         this.dateDemande = dateDemande;
         this.question = question;
@@ -70,11 +71,11 @@ public class DemandeExpertise {
         this.id = id;
     }
 
-    public LocalDate getDateDemande() {
+    public LocalDateTime getDateDemande() {
         return dateDemande;
     }
 
-    public void setDateDemande(LocalDate dateDemande) {
+    public void setDateDemande(LocalDateTime dateDemande) {
         this.dateDemande = dateDemande;
     }
 
