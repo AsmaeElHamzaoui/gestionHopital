@@ -89,25 +89,21 @@
                                     <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Jour</th>
                                     <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Heure début</th>
                                     <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Heure fin</th>
-                                    <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Durée consultation</th>
-                                    <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Nombre de créneaux</th>
-                                    <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Statut</th>
+                                    <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Disponiblilité</th>
                                     <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach var="creneau" items="${creneaux}">
                                     <tr>
-                                        <td class="border border-gray-200 px-4 py-2">${creneau.jourSemaine}</td>
+                                        <td class="border border-gray-200 px-4 py-2">${creneau.dateJourActuelle}</td>
                                         <td class="border border-gray-200 px-4 py-2">${creneau.heureDebut}</td>
                                         <td class="border border-gray-200 px-4 py-2">${creneau.heureFin}</td>
-                                        <td class="border border-gray-200 px-4 py-2">${creneau.dureeConsultationMinutes} min</td>
-                                        <td class="border border-gray-200 px-4 py-2">${creneau.nombreCreneaux}</td>
-                                        <td class="border border-gray-200 px-4 py-2 ${creneau.actif ? 'text-green-600' : 'text-red-600'}">
-                                            ${creneau.actif ? 'Actif' : 'Inactif'}
+                                        <td class="border border-gray-200 px-4 py-2 ${creneau.disponible ? 'text-green-600' : 'text-red-600'}">
+                                            ${creneau.disponible ? 'Disponible' : 'Indisponible'}
                                         </td>
                                         <td class="border border-gray-200 px-4 py-2">
-                                            <a href="#" onclick="openModal('edit', ${creneau.id}, '${creneau.jourSemaine}', '${creneau.heureDebut}', '${creneau.heureFin}', ${creneau.dureeConsultationMinutes}, ${creneau.actif})" class="text-teal-600 hover:underline">Modifier</a>
+                                            <a href="#" onclick="openModal('edit', ${creneau.id}, '${creneau.dateJourActuelle}', '${creneau.heureDebut}', '${creneau.heureFin}', ${creneau.disponible})" class="text-teal-600 hover:underline">Modifier</a>
                                             <a href="creneaux?action=delete&id=${creneau.id}" onclick="return confirm('Supprimer ce créneau?')" class="text-red-600 hover:underline ml-2">Supprimer</a>
                                         </td>
                                     </tr>
@@ -120,125 +116,105 @@
         </main>
     </div>
 
-    <!-- Modal pour ajouter ou modifier un créneau -->
-    <div id="creneauModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div class="mt-3">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 id="modalTitle" class="text-lg font-medium text-gray-900">Ajouter un Créneau</h3>
-                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
 
-                <form id="creneauForm" action="${pageContext.request.contextPath}/creneaux" method="POST">
-                    <input type="hidden" name="action" id="formAction" value="add">
-                    <input type="hidden" name="id" id="creneauId">
-                    <input type="hidden" name="specialisteId" value="${sessionScope.user.id}">
+          <!-- Modal pour ajouter ou modifier un créneau -->
+          <div id="creneauModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+              <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                  <div class="mt-3">
+                      <div class="flex justify-between items-center mb-4">
+                          <h3 id="modalTitle" class="text-lg font-medium text-gray-900">Ajouter un Créneau</h3>
+                          <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                              </svg>
+                          </button>
+                      </div>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Jour de la semaine</label>
-                        <select name="jourSemaine" id="jourSemaine" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" required>
-                            <option value="">Sélectionner un jour</option>
-                            <option value="LUNDI">Lundi</option>
-                            <option value="MARDI">Mardi</option>
-                            <option value="MERCREDI">Mercredi</option>
-                            <option value="JEUDI">Jeudi</option>
-                            <option value="VENDREDI">Vendredi</option>
-                            <option value="SAMEDI">Samedi</option>
-                            <option value="DIMANCHE">Dimanche</option>
-                        </select>
-                    </div>
+                      <form id="creneauForm" action="${pageContext.request.contextPath}/creneaux" method="POST">
+                          <input type="hidden" name="action" id="formAction" value="add">
+                          <input type="hidden" name="id" id="creneauId">
+                          <input type="hidden" name="idSpecialiste" value="${sessionScope.user.id}">
+                          <input type="hidden" name="dateJourActuelle" id="dateJourActuelle" value="<%= java.time.LocalDate.now() %>">
 
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Heure de début</label>
-                            <input type="time" name="heureDebut" id="heureDebut" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Heure de fin</label>
-                            <input type="time" name="heureFin" id="heureFin" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" required>
-                        </div>
-                    </div>
+                          <div class="grid grid-cols-2 gap-4 mb-4">
+                              <div>
+                                  <label class="block text-sm font-medium text-gray-700 mb-2">Heure de début</label>
+                                  <input type="time" name="heureDebut" id="heureDebut" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+                              </div>
+                              <div>
+                                  <label class="block text-sm font-medium text-gray-700 mb-2">Heure de fin</label>
+                                  <input type="time" name="heureFin" id="heureFin" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+                              </div>
+                          </div>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Durée consultation (minutes)</label>
-                        <input type="number" name="dureeConsultationMinutes" id="dureeConsultationMinutes" value="30" min="15" step="15" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" required>
-                    </div>
+                          <div class="flex items-center mb-4">
+                              <input type="checkbox" name="disponible" id="disponible" class="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500" checked>
+                              <label class="ml-2 text-sm text-gray-700">Créneau disponible</label>
+                          </div>
 
-                    <div class="flex items-center mb-4">
-                        <input type="checkbox" name="actif" id="actif" class="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500">
-                        <label class="ml-2 text-sm text-gray-700">Créneau actif</label>
-                    </div>
+                          <div class="flex justify-end gap-3">
+                              <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                                  Annuler
+                              </button>
+                              <button type="submit" id="submitButton" class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-md hover:bg-teal-700">
+                                  Ajouter
+                              </button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
 
-                    <div class="flex justify-end gap-3">
-                        <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
-                            Annuler
-                        </button>
-                        <button type="submit" id="submitButton" class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-md hover:bg-teal-700">
-                            Ajouter
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+          <script>
+              function openModal(action, id, dateJourActuelle, heureDebut, heureFin, disponible) {
+                  const modal = document.getElementById('creneauModal');
+                  const form = document.getElementById('creneauForm');
+                  const modalTitle = document.getElementById('modalTitle');
+                  const formAction = document.getElementById('formAction');
+                  const creneauId = document.getElementById('creneauId');
+                  const heureDebutInput = document.getElementById('heureDebut');
+                  const heureFinInput = document.getElementById('heureFin');
+                  const dispoCheckbox = document.getElementById('disponible');
+                  const dateInput = document.getElementById('dateJourActuelle');
+                  const submitButton = document.getElementById('submitButton');
 
-    <script>
-        function openModal(action, id, jourSemaine, heureDebut, heureFin, dureeConsultationMinutes, actif) {
-            const modal = document.getElementById('creneauModal');
-            const form = document.getElementById('creneauForm');
-            const modalTitle = document.getElementById('modalTitle');
-            const formAction = document.getElementById('formAction');
-            const creneauId = document.getElementById('creneauId');
-            const jourSemaineSelect = document.getElementById('jourSemaine');
-            const heureDebutInput = document.getElementById('heureDebut');
-            const heureFinInput = document.getElementById('heureFin');
-            const dureeConsultationInput = document.getElementById('dureeConsultationMinutes');
-            const actifCheckbox = document.getElementById('actif');
-            const submitButton = document.getElementById('submitButton');
+                  // Reset form
+                  form.reset();
+                  creneauId.value = '';
+                  dispoCheckbox.checked = true;
+                  dateInput.value = new Date().toISOString().split('T')[0];
+                  modalTitle.textContent = 'Ajouter un Créneau';
+                  formAction.value = 'add';
+                  submitButton.textContent = 'Ajouter';
 
-            // Reset form
-            form.reset();
-            creneauId.value = '';
-            actifCheckbox.checked = true;
-            modalTitle.textContent = 'Ajouter un Créneau';
-            formAction.value = 'add';
-            submitButton.textContent = 'Ajouter';
+                  // Si c'est une modification
+                  if (action === 'edit' && id) {
+                      modalTitle.textContent = 'Modifier un Créneau';
+                      formAction.value = 'edit';
+                      creneauId.value = id;
+                      heureDebutInput.value = heureDebut;
+                      heureFinInput.value = heureFin;
+                      dispoCheckbox.checked = disponible;
+                      dateInput.value = dateJourActuelle;
+                      submitButton.textContent = 'Modifier';
+                  }
 
-            if (action === 'edit' && id) {
-                // Populate form for editing
-                modalTitle.textContent = 'Modifier un Créneau';
-                formAction.value = 'edit';
-                creneauId.value = id;
-                jourSemaineSelect.value = jourSemaine || '';
-                heureDebutInput.value = heureDebut || '';
-                heureFinInput.value = heureFin || '';
-                dureeConsultationInput.value = dureeConsultationMinutes || 30;
-                actifCheckbox.checked = actif || false;
-                submitButton.textContent = 'Modifier';
-            }
+                  modal.classList.remove('hidden');
+              }
 
-            modal.classList.remove('hidden');
-        }
+              function closeModal() {
+                  const modal = document.getElementById('creneauModal');
+                  modal.classList.add('hidden');
+                  document.getElementById('creneauForm').reset();
+              }
 
-        function closeModal() {
-            document.getElementById('creneauModal').classList.add('hidden');
-            document.getElementById('creneauForm').reset();
-            document.getElementById('formAction').value = 'add';
-            document.getElementById('modalTitle').textContent = 'Ajouter un Créneau';
-            document.getElementById('submitButton').textContent = 'Ajouter';
-        }
-
-        // Fermer le modal en cliquant à l'extérieur
-        window.onclick = function(event) {
-            const modal = document.getElementById('creneauModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-    </script>
+              // Fermer le modal en cliquant à l'extérieur
+              window.onclick = function(event) {
+                  const modal = document.getElementById('creneauModal');
+                  if (event.target === modal) {
+                      closeModal();
+                  }
+              }
+          </script>
 </body>
 </html>
