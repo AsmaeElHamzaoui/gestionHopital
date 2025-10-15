@@ -1,5 +1,6 @@
 package com.medecineApp.repository;
 
+import com.medecineApp.model.Consultation;
 import com.medecineApp.model.CreneauJournalier;
 import com.medecineApp.enums.JourSemaine;
 import com.medecineApp.util.JpaUtil;
@@ -15,6 +16,13 @@ public class CreneauJournalierRepository {
                         CreneauJournalier.class)
                 .setParameter("specialisteId", specialisteId)
                 .getResultList();
+        em.close();
+        return list;
+    }
+
+    public List<CreneauJournalier> findAll() {
+        EntityManager em = JpaUtil.getEntityManager();
+        List<CreneauJournalier> list = em.createQuery("SELECT c FROM CreneauJournalier c", CreneauJournalier.class).getResultList();
         em.close();
         return list;
     }
