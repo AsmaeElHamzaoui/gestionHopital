@@ -191,76 +191,16 @@
                         <table class="w-full">
                             <thead class="bg-gray-50 border-b border-gray-200">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Condultation-motif</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date de demande</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spécialité</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spécialité & spécialiste</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                                JD
-                                            </div>
-                                            <div>
-                                                <div class="text-sm font-medium text-gray-900">Jean Dupont</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">2025-10-10</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Cardiologie</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                            En attente
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap flex gap-2">
-                                        <button onclick="editExpertise(1)" class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
-                                            Modifier
-                                        </button>
-                                        <button onclick="deleteExpertise(1)" class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors">
-                                            Supprimer
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                                ML
-                                            </div>
-                                            <div>
-                                                <div class="text-sm font-medium text-gray-900">Marie Leclerc</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">2025-10-12</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Neurologie</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Approuvée
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap flex gap-2">
-                                        <button onclick="editExpertise(2)" class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
-                                            Modifier
-                                        </button>
-                                        <button onclick="deleteExpertise(2)" class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors">
-                                            Supprimer
-                                        </button>
-                                    </td>
-                                </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -274,7 +214,7 @@
         <div class="bg-white rounded-lg shadow-lg p-4 w-full max-w-3xl max-h-[80vh] overflow-y-auto">
             <h3 class="text-lg font-bold text-gray-900 mb-4">Demande d'expertise</h3>
 
-            <form id="expertise-form" class="space-y-4">
+            <form action="/demande-expertise" method="post"  id="expertise-form" class="space-y-4">
                 <!-- Section 1: Consultation & Priorité -->
                 <div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -380,7 +320,7 @@
                         class="px-4 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-200 transition-colors">
                     Annuler
                 </button>
-                <button type="button" onclick="submitExpertise()"
+                <button type="button"
                         class="px-4 py-1.5 bg-emerald-500 text-white text-xs font-medium rounded-md hover:bg-emerald-600 transition-colors">
                     Soumettre
                 </button>
@@ -415,19 +355,7 @@
             document.getElementById('expertise-modal').classList.add('hidden');
         }
 
-        function editExpertise(id) {
-            alert('Modifier la demande d\'expertise avec ID: ' + id);
-        }
 
-        function deleteExpertise(id) {
-            if (confirm('Voulez-vous vraiment supprimer la demande d\'expertise avec ID: ' + id + '?')) {
-                alert('Demande d\'expertise avec ID: ' + id + ' supprimée.');
-            }
-        }
-
-        function submitExpertise() {
-            alert('Demande d\'expertise soumise.');
-        }
 
         // Filtrer les spécialistes en fonction de la spécialité
         const selectSpecialite = document.getElementById('specialite');
