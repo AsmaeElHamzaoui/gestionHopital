@@ -1,13 +1,7 @@
 package com.medecineApp.controller;
 
-import com.medecineApp.model.Consultation;
-import com.medecineApp.model.CreneauJournalier;
-import com.medecineApp.model.Patient;
-import com.medecineApp.model.User;
-import com.medecineApp.service.ConsultationService;
-import com.medecineApp.service.CreneauJournalierService;
-import com.medecineApp.service.PatientService;
-import com.medecineApp.service.UserService;
+import com.medecineApp.model.*;
+import com.medecineApp.service.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,21 +16,18 @@ public class DashboardGeneralisteController extends HttpServlet {
     private final PatientService patientService = new PatientService();
     private final ConsultationService consultationService= new ConsultationService();
     private final UserService userService=new UserService();
-    private final CreneauJournalierService creneauJourService=new CreneauJournalierService();
+    private final CreneauService creneauService=new CreneauService();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Fetch all patients
         List<Patient> patients = patientService.getAllPatients();
         List<Consultation>  consultations=consultationService.getAllConsultations();
         List<User> specialistes=userService.getAllSpecialiste();
-        List<CreneauJournalier> creneaux=creneauJourService.getCreneauxSpecialisteNonActif();
+        List<Creneau> creneaux=creneauService.getCrenauxIndisponible();
         req.setAttribute("patients", patients);
         req.setAttribute("consultations", consultations);
         req.setAttribute("specialistes",specialistes);
         req.setAttribute("creneaux",creneaux);
-
-
-        // Forward to the JSP
-        req.getRequestDispatcher("/pages/dashboard-generaliste.jsp").forward(req, resp);
+       req.getRequestDispatcher("/pages/dashboard-generaliste.jsp").forward(req, resp);
     }
 }
