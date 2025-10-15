@@ -179,7 +179,7 @@
             <div id="expertise-section" class="hidden">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-semibold text-gray-900">Demandes d'expertise</h2>
-                    <button onclick="showExpertiseModal()" class="px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">
+                    <button onclick="openExpertiseModal()" class="px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">
                         Demander expertise
                     </button>
                 </div>
@@ -243,9 +243,9 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap flex gap-2">
-                                            <a href="demande-expertise?action=edit&id=${demande.id}" class="px-3 py-1 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 transition-colors">
+                                            <button onclick='openExpertiseModal(${demande.id}, "${demande.consultation.id}", "${demande.question}", "${demande.priorite}", "${demande.specialite}", "${demande.specialiste != null ? demande.specialiste.id : ""}", "${demande.dateDemande}", "${demande.tarif != null ? demande.tarif : ""}")' class="px-3 py-1 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 transition-colors">
                                                 Modifier
-                                            </a>
+                                            </button>
                                             <form action="demande-expertise" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette demande ?');">
                                                 <input type="hidden" name="action" value="delete">
                                                 <input type="hidden" name="id" value="${demande.id}">
@@ -264,13 +264,15 @@
         </main>
     </div>
 
-    <!-- Modal for requesting expertise -->
+    <!-- Modal for requesting/editing expertise -->
     <div id="expertise-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-lg p-4 w-full max-w-3xl max-h-[80vh] overflow-y-auto">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Demande d'expertise</h3>
+            <h3 id="modal-title" class="text-lg font-bold text-gray-900 mb-4">Demande d'expertise</h3>
 
             <form action="demande-expertise" method="post" id="expertise-form" class="space-y-4">
-                <input type="hidden" name="action" value="add">
+                <input type="hidden" name="action" id="form-action" value="add">
+                <input type="hidden" name="id" id="demande-id">
+
                 <!-- Section 1: Consultation & Priorité -->
                 <div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -351,9 +353,11 @@
                     <select id="dateDemande" name="dateDemande" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm">
                         <option value="">Sélectionner</option>
                         <c:forEach var="creneau" items="${creneaux}">
-                            <option value="${creneau.id}" data-specialiste="${creneau.specialiste.id}">
-                                ${creneau.heureDebut} - ${creneau.heureFin}
-                            </option>
+                         <option
+                             value="${creneau.dateJourActuelle}T${creneau.heureDebut}"
+                             data-specialiste="${creneau.idSpecialiste}">
+                             ${creneau.dateJourActuelle} — ${creneau.heureDebut} - ${creneau.heureFin}
+                         </option>
                         </c:forEach>
                     </select>
                 </div>
@@ -374,7 +378,7 @@
                             class="px-4 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-200 transition-colors">
                         Annuler
                     </button>
-                    <button type="submit"
+                    <button type="submit" id="submit-btn"
                             class="px-4 py-1.5 bg-emerald-500 text-white text-xs font-medium rounded-md hover:bg-emerald-600 transition-colors">
                         Soumettre
                     </button>
@@ -403,12 +407,70 @@
             document.getElementById('expertise-section').classList.remove('hidden');
         }
 
-        function showExpertiseModal() {
-            document.getElementById('expertise-modal').classList.remove('hidden');
+        function openExpertiseModal(id, consultationId, question, priorite, specialite, specialisteId, dateDemande, tarif) {
+            const modal = document.getElementById('expertise-modal');
+            const form = document.getElementById('expertise-form');
+            const modalTitle = document.getElementById('modal-title');
+            const formAction = document.getElementById('form-action');
+            const demandeIdInput = document.getElementById('demande-id');
+            const submitBtn = document.getElementById('submit-btn');
+
+            // Reset form
+            form.reset();
+
+            if (id) {
+                // Mode édition
+                modalTitle.textContent = 'Modifier la demande d\'expertise';
+                formAction.value = 'update';
+                demandeIdInput.value = id;
+                submitBtn.textContent = 'Mettre à jour';
+
+                // Remplir les champs
+                document.getElementById('consultation').value = consultationId;
+                document.getElementById('question').value = question;
+                document.getElementById('priorite').value = priorite;
+                document.getElementById('specialite').value = specialite;
+
+                // Déclencher l'événement change pour filtrer les spécialistes
+                document.getElementById('specialite').dispatchEvent(new Event('change'));
+
+                // Attendre un peu pour que les options soient filtrées
+                setTimeout(() => {
+                    if (specialisteId) {
+                        document.getElementById('specialiste').value = specialisteId;
+                        document.getElementById('specialiste').dispatchEvent(new Event('change'));
+                    }
+
+                    // Attendre encore pour que les créneaux soient filtrés
+                    setTimeout(() => {
+                        if (dateDemande && dateDemande !== 'null') {
+                            // Extraire la date et l'heure du format ISO
+                            const dateTimeMatch = dateDemande.match(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/);
+                            if (dateTimeMatch) {
+                                const formattedDateTime = dateTimeMatch[1] + 'T' + dateTimeMatch[2];
+                                document.getElementById('dateDemande').value = formattedDateTime;
+                            }
+                        }
+                    }, 100);
+                }, 100);
+
+                if (tarif && tarif !== 'null') {
+                    document.getElementById('tarif').value = tarif;
+                }
+            } else {
+                // Mode ajout
+                modalTitle.textContent = 'Demande d\'expertise';
+                formAction.value = 'add';
+                demandeIdInput.value = '';
+                submitBtn.textContent = 'Soumettre';
+            }
+
+            modal.classList.remove('hidden');
         }
 
         function closeExpertiseModal() {
             document.getElementById('expertise-modal').classList.add('hidden');
+            document.getElementById('expertise-form').reset();
         }
 
         // Filtrer les spécialistes en fonction de la spécialité
@@ -433,12 +495,16 @@
 
             // Réafficher toutes les options si aucune spécialité n'est choisie
             if (!selectedSpec) {
-                allSpecialisteOptions.forEach(opt => selectSpecialiste.appendChild(opt));
+                allSpecialisteOptions.forEach(opt => {
+                    if (opt.value !== '') {
+                        selectSpecialiste.appendChild(opt.cloneNode(true));
+                    }
+                });
             } else {
                 // Filtrer les spécialistes selon la spécialité choisie
                 allSpecialisteOptions.forEach(opt => {
                     if (opt.dataset.specialite === selectedSpec) {
-                        selectSpecialiste.appendChild(opt);
+                        selectSpecialiste.appendChild(opt.cloneNode(true));
                     }
                 });
             }
@@ -468,12 +534,16 @@
 
             // Réafficher tous les créneaux si aucun spécialiste n'est choisi
             if (!selectedSpecialiste) {
-                allCreneauOptions.forEach(opt => selectCreneau.appendChild(opt));
+                allCreneauOptions.forEach(opt => {
+                    if (opt.value !== '') {
+                        selectCreneau.appendChild(opt.cloneNode(true));
+                    }
+                });
             } else {
                 // Filtrer les créneaux selon le spécialiste choisi
                 allCreneauOptions.forEach(opt => {
                     if (opt.dataset.specialiste === selectedSpecialiste) {
-                        selectCreneau.appendChild(opt);
+                        selectCreneau.appendChild(opt.cloneNode(true));
                     }
                 });
             }

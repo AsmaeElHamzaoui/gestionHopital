@@ -63,11 +63,11 @@ public class DemandeExpertiseController extends HttpServlet {
 
             Consultation consultation = consultationService.getConsultation(consultationId);
             Specialiste specialite = Specialiste.valueOf(specialiteStr);
-            User specialiste = specialisteIdStr.isEmpty() ? null : userService.getUser(Long.parseLong(specialisteIdStr));
-            LocalDateTime dateDemande = dateDemandeStr.isEmpty()
+            User specialiste = (specialisteIdStr == null || specialisteIdStr.isEmpty()) ? null : userService.getUser(Long.parseLong(specialisteIdStr));
+            LocalDateTime dateDemande = (dateDemandeStr == null || dateDemandeStr.isEmpty())
                     ? LocalDateTime.now()
                     : LocalDateTime.parse(dateDemandeStr, formatter);
-            Double tarif = tarifStr.isEmpty() ? null : Double.parseDouble(tarifStr);
+            Double tarif = (tarifStr == null || tarifStr.isEmpty()) ? null : Double.parseDouble(tarifStr);
 
             DemandeExpertise demande = new DemandeExpertise(dateDemande, question, priorite, StatutExpertise.EN_ATTENTE, consultation, specialite);
             demande.setSpecialiste(specialiste);
@@ -91,11 +91,11 @@ public class DemandeExpertiseController extends HttpServlet {
             demande.setQuestion(question);
             demande.setPriorite(priorite);
             demande.setSpecialite(Specialiste.valueOf(specialiteStr));
-            demande.setSpecialiste(specialisteIdStr.isEmpty() ? null : userService.getUser(Long.parseLong(specialisteIdStr)));
-            demande.setDateDemande(dateDemandeStr.isEmpty()
+            demande.setSpecialiste((specialisteIdStr == null || specialisteIdStr.isEmpty()) ? null : userService.getUser(Long.parseLong(specialisteIdStr)));
+            demande.setDateDemande((dateDemandeStr == null || dateDemandeStr.isEmpty())
                     ? LocalDateTime.now()
                     : LocalDateTime.parse(dateDemandeStr, formatter));
-            demande.setTarif(tarifStr.isEmpty() ? null : Double.parseDouble(tarifStr));
+            demande.setTarif((tarifStr == null || tarifStr.isEmpty()) ? null : Double.parseDouble(tarifStr));
 
             demandeService.saveDemande(demande);
             resp.sendRedirect("dashboard-generaliste#expertise-section");
