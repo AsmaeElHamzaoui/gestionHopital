@@ -1,5 +1,7 @@
 package com.medecineApp.controller;
 
+import com.medecineApp.model.Creneau;
+import com.medecineApp.service.CreneauService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -7,15 +9,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import com.medecineApp.model.User;
-import com.medecineApp.service.CreneauJournalierService;
-import com.medecineApp.model.CreneauJournalier;
 
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/dashboard-specialiste")
 public class DashboardSpecialisteController extends HttpServlet {
-    private final CreneauJournalierService creneauService = new CreneauJournalierService();
+    private final CreneauService creneauService = new CreneauService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,7 +28,7 @@ public class DashboardSpecialisteController extends HttpServlet {
         }
 
         // Fetch the time slots for the connected specialist
-        List<CreneauJournalier> creneaux = creneauService.getCreneauxBySpecialiste(user.getId());
+        List<Creneau> creneaux = creneauService.getCreneauxBySpecialiste(user.getId());
 
         // Pass the user and time slots to the JSP
         req.setAttribute("user", user);
