@@ -191,7 +191,7 @@
                         <table class="w-full">
                             <thead class="bg-gray-50 border-b border-gray-200">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Condultation-motif</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Consultation-motif</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date de demande</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spécialité & spécialiste</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
@@ -200,7 +200,62 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-
+                                <c:forEach var="demande" items="${demandes}">
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">${demande.consultation.motif}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">${demande.dateDemande}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">
+                                                ${demande.specialite}
+                                                <c:if test="${not empty demande.specialiste}">
+                                                    - Dr. ${demande.specialiste.nom} ${demande.specialiste.prenom}
+                                                </c:if>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                                                <c:choose>
+                                                    <c:when test="${demande.statut == 'EN_ATTENTE'}">bg-yellow-100 text-yellow-800</c:when>
+                                                    <c:when test="${demande.statut == 'TERMINEE'}">bg-green-100 text-green-800</c:when>
+                                                    <c:otherwise>bg-gray-100 text-gray-800</c:otherwise>
+                                                </c:choose>">
+                                                ${demande.statut}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                                                <c:choose>
+                                                    <c:when test="${demande.priorite == 4}">bg-red-100 text-red-800</c:when>
+                                                    <c:when test="${demande.priorite == 3}">bg-orange-100 text-orange-800</c:when>
+                                                    <c:when test="${demande.priorite == 2}">bg-green-100 text-green-800</c:when>
+                                                    <c:otherwise>bg-blue-100 text-blue-800</c:otherwise>
+                                                </c:choose>">
+                                                <c:choose>
+                                                    <c:when test="${demande.priorite == 4}">Urgente</c:when>
+                                                    <c:when test="${demande.priorite == 3}">Élevée</c:when>
+                                                    <c:when test="${demande.priorite == 2}">Normale</c:when>
+                                                    <c:otherwise>Faible</c:otherwise>
+                                                </c:choose>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+                                            <a href="demande-expertise?action=edit&id=${demande.id}" class="px-3 py-1 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 transition-colors">
+                                                Modifier
+                                            </a>
+                                            <form action="demande-expertise" method="post" onsubmit="return confirm('Voulez-vous vraiment supprimer cette demande ?');">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="id" value="${demande.id}">
+                                                <button type="submit" class="px-3 py-1 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 transition-colors">
+                                                    Supprimer
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
                             </tbody>
                         </table>
                     </div>
@@ -214,7 +269,8 @@
         <div class="bg-white rounded-lg shadow-lg p-4 w-full max-w-3xl max-h-[80vh] overflow-y-auto">
             <h3 class="text-lg font-bold text-gray-900 mb-4">Demande d'expertise</h3>
 
-            <form action="/demande-expertise" method="post"  id="expertise-form" class="space-y-4">
+            <form action="demande-expertise" method="post" id="expertise-form" class="space-y-4">
+                <input type="hidden" name="action" value="add">
                 <!-- Section 1: Consultation & Priorité -->
                 <div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -233,10 +289,9 @@
                         <div>
                             <label for="priorite" class="block text-xs font-medium text-gray-700 mb-1">Priorité</label>
                             <select id="priorite" name="priorite" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-1.5 px-2 border text-sm" required>
-                                <option value="1">Faible</option>
-                                <option value="2" selected>Normale</option>
-                                <option value="3">Élevée</option>
-                                <option value="4">Urgente</option>
+                                 <option value="4">Urgente</option>
+                                 <option value="2" selected>Normale</option>
+                                 <option value="3">Non normale</option>
                             </select>
                         </div>
                     </div>
@@ -312,19 +367,20 @@
                                   placeholder="Décrivez la raison de la demande, symptômes, antécédents..." required></textarea>
                     </div>
                 </div>
+
+                <!-- Boutons d'action -->
+                <div class="mt-4 flex justify-end gap-2 pt-4">
+                    <button type="button" onclick="closeExpertiseModal()"
+                            class="px-4 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-200 transition-colors">
+                        Annuler
+                    </button>
+                    <button type="submit"
+                            class="px-4 py-1.5 bg-emerald-500 text-white text-xs font-medium rounded-md hover:bg-emerald-600 transition-colors">
+                        Soumettre
+                    </button>
+                </div>
             </form>
 
-            <!-- Boutons d'action -->
-            <div class="mt-4 flex justify-end gap-2 pt-4">
-                <button type="button" onclick="closeExpertiseModal()"
-                        class="px-4 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-200 transition-colors">
-                    Annuler
-                </button>
-                <button type="button"
-                        class="px-4 py-1.5 bg-emerald-500 text-white text-xs font-medium rounded-md hover:bg-emerald-600 transition-colors">
-                    Soumettre
-                </button>
-            </div>
         </div>
     </div>
 
@@ -354,8 +410,6 @@
         function closeExpertiseModal() {
             document.getElementById('expertise-modal').classList.add('hidden');
         }
-
-
 
         // Filtrer les spécialistes en fonction de la spécialité
         const selectSpecialite = document.getElementById('specialite');
