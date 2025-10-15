@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @WebServlet("/demande-expertise")
@@ -43,13 +45,14 @@ public class DemandeExpertiseController extends HttpServlet {
             req.getRequestDispatcher("/pages/dashboard-generaliste.jsp").forward(req, resp);
         }
     }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
 
+        // Formatter pour la date + heure envoyée depuis le formulaire
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+
         if ("add".equals(action)) {
-            // Ajouter une nouvelle demande
             Long consultationId = Long.parseLong(req.getParameter("consultation"));
             String question = req.getParameter("question");
             Integer priorite = Integer.parseInt(req.getParameter("priorite"));
@@ -61,7 +64,9 @@ public class DemandeExpertiseController extends HttpServlet {
             Consultation consultation = consultationService.getConsultation(consultationId);
             Specialiste specialite = Specialiste.valueOf(specialiteStr);
             User specialiste = specialisteIdStr.isEmpty() ? null : userService.getUser(Long.parseLong(specialisteIdStr));
-            LocalDate dateDemande = dateDemandeStr.isEmpty() ? LocalDate.now() : LocalDate.parse(dateDemandeStr);
+            LocalDateTime dateDemande = dateDemandeStr.isEmpty()
+                    ? LocalDateTime.now()
+                    : LocalDateTime.parse(dateDemandeStr, formatter);
             Double tarif = tarifStr.isEmpty() ? null : Double.parseDouble(tarifStr);
 
             DemandeExpertise demande = new DemandeExpertise(dateDemande, question, priorite, StatutExpertise.EN_ATTENTE, consultation, specialite);
@@ -70,8 +75,8 @@ public class DemandeExpertiseController extends HttpServlet {
 
             demandeService.saveDemande(demande);
             resp.sendRedirect("dashboard-generaliste#expertise-section");
+
         } else if ("update".equals(action)) {
-            // Mettre à jour une demande existante
             Long id = Long.parseLong(req.getParameter("id"));
             Long consultationId = Long.parseLong(req.getParameter("consultation"));
             String question = req.getParameter("question");
@@ -87,13 +92,15 @@ public class DemandeExpertiseController extends HttpServlet {
             demande.setPriorite(priorite);
             demande.setSpecialite(Specialiste.valueOf(specialiteStr));
             demande.setSpecialiste(specialisteIdStr.isEmpty() ? null : userService.getUser(Long.parseLong(specialisteIdStr)));
-            demande.setDateDemande(dateDemandeStr.isEmpty() ? LocalDate.now() : LocalDate.parse(dateDemandeStr));
+            demande.setDateDemande(dateDemandeStr.isEmpty()
+                    ? LocalDateTime.now()
+                    : LocalDateTime.parse(dateDemandeStr, formatter));
             demande.setTarif(tarifStr.isEmpty() ? null : Double.parseDouble(tarifStr));
 
             demandeService.saveDemande(demande);
             resp.sendRedirect("dashboard-generaliste#expertise-section");
+
         } else if ("delete".equals(action)) {
-            // Supprimer une demande
             Long id = Long.parseLong(req.getParameter("id"));
             demandeService.deleteDemande(id);
             resp.sendRedirect("dashboard-generaliste#expertise-section");
