@@ -120,38 +120,46 @@
                     <h2 class="text-2xl font-semibold text-gray-900">Demandes d'Expertise</h2>
                 </div>
                 <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Liste des demandes d'expertise</h3>
-                    <table class="w-full border-collapse">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
-                                <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Patient</th>
-                                <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Date</th>
-                                <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Statut</th>
-                                <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="border border-gray-200 px-4 py-2">1</td>
-                                <td class="border border-gray-200 px-4 py-2">Jean Dupont</td>
-                                <td class="border border-gray-200 px-4 py-2">2025-10-15</td>
-                                <td class="border border-gray-200 px-4 py-2 text-yellow-600">En attente</td>
-                                <td class="border border-gray-200 px-4 py-2">
-                                    <a href="#" class="text-teal-600 hover:underline">Répondre</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="border border-gray-200 px-4 py-2">2</td>
-                                <td class="border border-gray-200 px-4 py-2">Marie Curie</td>
-                                <td class="border border-gray-200 px-4 py-2">2025-10-14</td>
-                                <td class="border border-gray-200 px-4 py-2 text-yellow-600">En attente</td>
-                                <td class="border border-gray-200 px-4 py-2">
-                                    <a href="#" class="text-teal-600 hover:underline">Répondre</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Liste des demandes d'expertise actuelle</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+
+                        <c:forEach var="demande" items="${demandes}">
+                            <c:if test="${demande.priorite == 1}">
+                              <div class="bg-white border-l-4 border-red-500 rounded-lg shadow p-4">
+                                <p style="color:red;">Urgente</p>
+                                 <h4 class="text-md font-semibold text-gray-900">${demande.dateDemande}</h4>
+                                    <p class="text-sm text-gray-600">${demande.question}</p>
+                                    <div class="mt-2">
+                                    <a href="#" class="text-teal-600 hover:underline text-sm">Répondre</a>
+                                 </div>
+                               </div>
+                            </c:if>
+
+                            <c:if test="${demande.priorite == 2}">
+                               <div class="bg-white border-l-4 border-orange-500 rounded-lg shadow p-4">
+                                  <p style="color:orange;">Élevée</p>
+                                  <h4 class="text-md font-semibold text-gray-900">${demande.dateDemande}</h4>
+                                  <p class="text-sm text-gray-600">${demande.question}</p>
+                                  <div class="mt-2">
+                                  <a href="#" class="text-teal-600 hover:underline text-sm">Répondre</a>
+                                  </div>
+                                </div>
+                            </c:if>
+
+                            <c:if test="${demande.priorite == 3}">
+                                <div class="bg-white border-l-4 border-green-500 rounded-lg shadow p-4">
+                                    <p style="color:green;">Normale</p>
+                                    <h4 class="text-md font-semibold text-gray-900">${demande.dateDemande}</h4>
+                                    <p class="text-sm text-gray-600">${demande.question}</p>
+                                    <div class="mt-2">
+                                     <a href="#" class="text-teal-600 hover:underline text-sm">Répondre</a>
+                                    </div>
+                                 </div>
+                            </c:if>
+                        </c:forEach>
+
+                    </div>
                 </div>
             </div>
         </main>

@@ -229,15 +229,15 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
                                                 <c:choose>
-                                                    <c:when test="${demande.priorite == 4}">bg-red-100 text-red-800</c:when>
-                                                    <c:when test="${demande.priorite == 3}">bg-orange-100 text-orange-800</c:when>
-                                                    <c:when test="${demande.priorite == 2}">bg-green-100 text-green-800</c:when>
+                                                    <c:when test="${demande.priorite == 1}">bg-red-100 text-red-800</c:when>
+                                                    <c:when test="${demande.priorite == 2}">bg-orange-100 text-orange-800</c:when>
+                                                    <c:when test="${demande.priorite == 3}">bg-green-100 text-green-800</c:when>
                                                     <c:otherwise>bg-blue-100 text-blue-800</c:otherwise>
                                                 </c:choose>">
                                                 <c:choose>
-                                                    <c:when test="${demande.priorite == 4}">Urgente</c:when>
-                                                    <c:when test="${demande.priorite == 3}">Élevée</c:when>
-                                                    <c:when test="${demande.priorite == 2}">Normale</c:when>
+                                                    <c:when test="${demande.priorite == 1}">Urgente</c:when>
+                                                    <c:when test="${demande.priorite == 2}">Élevée</c:when>
+                                                    <c:when test="${demande.priorite == 3}">Normale</c:when>
                                                     <c:otherwise>Faible</c:otherwise>
                                                 </c:choose>
                                             </span>

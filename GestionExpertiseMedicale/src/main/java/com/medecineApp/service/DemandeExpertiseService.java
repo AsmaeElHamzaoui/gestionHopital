@@ -10,6 +10,7 @@ import com.medecineApp.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DemandeExpertiseService {
 
@@ -28,8 +29,12 @@ public class DemandeExpertiseService {
     }
 
     // Récupérer les demandes par ID de spécialiste
-    public List<DemandeExpertise> getDemandesBySpecialisteId(Long specialisteId) {
-        return demandeRepo.findAllBySpecialisteId(specialisteId);
+    public List<DemandeExpertise> getNowDemandesBySpecialisteId(Long specialisteId) {
+        LocalDate today = LocalDate.now(); // date du jour actuelle
+        return demandeRepo.findAllBySpecialisteId(specialisteId)
+                          .stream()
+                          .filter(d->d.getDateDemande().toLocalDate().isEqual(today))
+                          .collect(Collectors.toList());
     }
 
     // Sauvegarder une nouvelle demande d'expertise

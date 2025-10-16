@@ -120,7 +120,7 @@
                     <h2 class="text-2xl font-semibold text-gray-900">Demandes d'Expertise</h2>
                 </div>
                 <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Liste des demandes d'expertise</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Liste des demandes d'expertise actuelle</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
 

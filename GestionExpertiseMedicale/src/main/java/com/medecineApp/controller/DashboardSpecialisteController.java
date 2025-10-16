@@ -33,7 +33,7 @@ public class DashboardSpecialisteController extends HttpServlet {
         System.out.println("hi");
         // Fetch the time slots for the connected specialist
         List<Creneau> creneaux = creneauService.getCreneauxBySpecialiste(user.getId());
-        List<DemandeExpertise> demandes=demandeExpertise.getDemandesBySpecialisteId(user.getId());
+        List<DemandeExpertise> demandes=demandeExpertise.getNowDemandesBySpecialisteId(user.getId());
 
         // Pass the user and time slots to the JSP
         req.setAttribute("user", user);
