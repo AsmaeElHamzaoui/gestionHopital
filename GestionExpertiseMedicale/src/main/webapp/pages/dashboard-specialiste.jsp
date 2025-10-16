@@ -122,43 +122,38 @@
                 <div class="bg-white rounded-lg border border-gray-200 p-6">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Liste des demandes d'expertise actuelle</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-
                         <c:forEach var="demande" items="${demandes}">
                             <c:if test="${demande.priorite == 1}">
-                              <div class="bg-white border-l-4 border-red-500 rounded-lg shadow p-4">
-                                <p style="color:red;">Urgente</p>
-                                 <h4 class="text-md font-semibold text-gray-900">${demande.dateDemande}</h4>
+                                <div class="bg-white border-l-4 border-red-500 rounded-lg shadow p-4">
+                                    <p style="color:red;">Urgente</p>
+                                    <h4 class="text-md font-semibold text-gray-900">${demande.dateDemande}</h4>
                                     <p class="text-sm text-gray-600">${demande.question}</p>
                                     <div class="mt-2">
-                                    <a href="#" class="text-teal-600 hover:underline text-sm">Répondre</a>
-                                 </div>
-                               </div>
-                            </c:if>
-
-                            <c:if test="${demande.priorite == 2}">
-                               <div class="bg-white border-l-4 border-orange-500 rounded-lg shadow p-4">
-                                  <p style="color:orange;">Élevée</p>
-                                  <h4 class="text-md font-semibold text-gray-900">${demande.dateDemande}</h4>
-                                  <p class="text-sm text-gray-600">${demande.question}</p>
-                                  <div class="mt-2">
-                                  <a href="#" class="text-teal-600 hover:underline text-sm">Répondre</a>
-                                  </div>
+                                        <a href="#" onclick="openResponseModal(${demande.id})" class="text-teal-600 hover:underline text-sm">Répondre</a>
+                                    </div>
                                 </div>
                             </c:if>
-
+                            <c:if test="${demande.priorite == 2}">
+                                <div class="bg-white border-l-4 border-orange-500 rounded-lg shadow p-4">
+                                    <p style="color:orange;">Élevée</p>
+                                    <h4 class="text-md font-semibold text-gray-900">${demande.dateDemande}</h4>
+                                    <p class="text-sm text-gray-600">${demande.question}</p>
+                                    <div class="mt-2">
+                                        <a href="#" onclick="openResponseModal(${demande.id})" class="text-teal-600 hover:underline text-sm">Répondre</a>
+                                    </div>
+                                </div>
+                            </c:if>
                             <c:if test="${demande.priorite == 3}">
                                 <div class="bg-white border-l-4 border-green-500 rounded-lg shadow p-4">
                                     <p style="color:green;">Normale</p>
                                     <h4 class="text-md font-semibold text-gray-900">${demande.dateDemande}</h4>
                                     <p class="text-sm text-gray-600">${demande.question}</p>
                                     <div class="mt-2">
-                                     <a href="#" class="text-teal-600 hover:underline text-sm">Répondre</a>
+                                        <a href="#" onclick="openResponseModal(${demande.id})" class="text-teal-600 hover:underline text-sm">Répondre</a>
                                     </div>
-                                 </div>
+                                </div>
                             </c:if>
                         </c:forEach>
-
                     </div>
                 </div>
             </div>
@@ -177,13 +172,11 @@
                         </svg>
                     </button>
                 </div>
-
                 <form id="creneauForm" action="${pageContext.request.contextPath}/creneaux" method="POST">
                     <input type="hidden" name="action" id="formAction" value="add">
                     <input type="hidden" name="id" id="creneauId">
                     <input type="hidden" name="idSpecialiste" value="${sessionScope.user.id}">
                     <input type="hidden" name="dateJourActuelle" id="dateJourActuelle" value="<%= java.time.LocalDate.now() %>">
-
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Heure de début</label>
@@ -194,18 +187,51 @@
                             <input type="time" name="heureFin" id="heureFin" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" required>
                         </div>
                     </div>
-
                     <div class="flex items-center mb-4">
                         <input type="checkbox" name="disponible" id="disponible" class="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500" checked>
                         <label class="ml-2 text-sm text-gray-700">Créneau disponible</label>
                     </div>
-
                     <div class="flex justify-end gap-3">
                         <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
                             Annuler
                         </button>
                         <button type="submit" id="submitButton" class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-md hover:bg-teal-700">
                             Ajouter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour répondre à une demande d'expertise -->
+    <div id="responseModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Répondre à la Demande</h3>
+                    <button onclick="closeResponseModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <form id="responseForm" action="${pageContext.request.contextPath}/demande-expertise?action=repondre" method="POST">
+                    <input type="hidden" name="demandeId" id="demandeId">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tarif (€)</label>
+                        <input type="number" name="tarif" id="tarif" step="0.01" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Réponse</label>
+                        <textarea name="reponse" id="reponse" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" required></textarea>
+                    </div>
+                    <div class="flex justify-end gap-3">
+                        <button type="button" onclick="closeResponseModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                            Annuler
+                        </button>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-md hover:bg-teal-700">
+                            Envoyer
                         </button>
                     </div>
                 </form>
@@ -256,11 +282,33 @@
             document.getElementById('creneauForm').reset();
         }
 
-        // Fermer le modal en cliquant à l'extérieur
+        function openResponseModal(demandeId) {
+            const modal = document.getElementById('responseModal');
+            const form = document.getElementById('responseForm');
+            const demandeIdInput = document.getElementById('demandeId');
+
+            // Reset form
+            form.reset();
+            demandeIdInput.value = demandeId;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeResponseModal() {
+            const modal = document.getElementById('responseModal');
+            modal.classList.add('hidden');
+            document.getElementById('responseForm').reset();
+        }
+
+        // Fermer les modals en cliquant à l'extérieur
         window.onclick = function(event) {
-            const modal = document.getElementById('creneauModal');
-            if (event.target === modal) {
+            const creneauModal = document.getElementById('creneauModal');
+            const responseModal = document.getElementById('responseModal');
+            if (event.target === creneauModal) {
                 closeModal();
+            }
+            if (event.target === responseModal) {
+                closeResponseModal();
             }
         }
 

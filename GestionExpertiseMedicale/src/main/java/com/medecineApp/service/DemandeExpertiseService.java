@@ -38,6 +38,7 @@ public class DemandeExpertiseService {
     }
 
     // Sauvegarder une nouvelle demande d'expertise
+// Sauvegarder une nouvelle demande d'expertise ou mettre à jour une existante
     public void saveDemande(DemandeExpertise demande) {
         // Vérifier que la consultation existe
         Consultation consultation = consultationRepo.findById(demande.getConsultation().getId());
@@ -57,9 +58,12 @@ public class DemandeExpertiseService {
             }
         }
 
-        // Initialiser reponse et tarif à null si ce n'est pas déjà fait
-        demande.setReponse(null);
-        demande.setTarif(null);
+        // Ne pas réinitialiser reponse et tarif si la demande existe déjà
+        if (demande.getId() == null) {
+            demande.setReponse(null);
+            demande.setTarif(null);
+        }
+
         demandeRepo.save(demande);
     }
 

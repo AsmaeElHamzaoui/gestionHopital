@@ -104,6 +104,28 @@ public class DemandeExpertiseController extends HttpServlet {
             Long id = Long.parseLong(req.getParameter("id"));
             demandeService.deleteDemande(id);
             resp.sendRedirect("dashboard-generaliste#expertise-section");
+        }else if ("repondre".equals(action)) {
+            Long demandeId = Long.parseLong(req.getParameter("demandeId"));
+            String tarifStr = req.getParameter("tarif");
+            String reponse = req.getParameter("reponse");
+            System.out.println("voici la réponse" + reponse);
+
+            System.out.println("voici la tarif" + tarifStr);
+            DemandeExpertise demande = demandeService.getDemande(demandeId);
+
+            if (demande != null) {
+                System.out.println("Demande trouvée, mise à jour...");
+                demande.setReponse(reponse);
+                demande.setTarif(Double.parseDouble(tarifStr));
+                demande.setStatut(StatutExpertise.TERMINEE);
+                demandeService.saveDemande(demande);
+                System.out.println("Demande mise à jour avec succès");
+            } else {
+                System.out.println("Demande non trouvée pour l'id: " + demandeId);
+            }
+
+            resp.sendRedirect("dashboard-specialiste#expertise-section");
         }
+
     }
 }
