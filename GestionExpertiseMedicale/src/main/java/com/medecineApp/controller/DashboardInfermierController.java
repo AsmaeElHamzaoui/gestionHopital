@@ -51,5 +51,6 @@ public class DashboardInfermierController extends HttpServlet {
 
         // Forward vers la page JSP
         req.getRequestDispatcher("/pages/dashboard-infermier.jsp").forward(req, res);
+
     }
 }

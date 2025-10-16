@@ -14,7 +14,6 @@
         <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="text-2xl font-bold">Hôpital Santé</div>
             <ul class="flex space-x-6">
-                <li><a href="${pageContext.request.contextPath}/users" class="hover:text-teal-200 transition duration-300">users</a></li>
                 <li><a href="#" class="hover:text-teal-200 transition duration-300">Accueil</a></li>
                 <li><a href="#" class="hover:text-teal-200 transition duration-300">Services</a></li>
                 <li><a href="#" class="hover:text-teal-200 transition duration-300" onclick="openModal()">Login</a></li>
@@ -27,8 +26,8 @@
         <div class="absolute inset-0 bg-black opacity-50"></div>
         <div class="relative z-10 text-center text-white px-4">
             <h1 class="text-5xl font-bold mb-4 animate-fade-in-down">Bienvenue à l'Hôpital Santé</h1>
-            <p class="text-xl mb-6 animate-fade-in-up">Votre santé, notre priorité. Découvrez des soins de qualité avec compassion.</p>
-            <a href="#" class="bg-teal-500 text-white px-6 py-3 rounded-full hover:bg-teal-400 transition duration-300 animate-pulse">Prendre un rendez-vous</a>
+            <p class="text-xl font-meduim mb-6 animate-fade-in-up">Offrez un sourire accueillant à vos patients.</p>
+            <a href="#" class="bg-teal-500 text-white px-6 py-3 rounded-full hover:bg-teal-400 transition duration-300 animate-pulse">N’oubliez pas</a>
         </div>
     </main>
 

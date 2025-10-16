@@ -35,7 +35,7 @@ public class AuthController extends HttpServlet {
             session.setAttribute("user", user);
             session.setAttribute("userRole", user.getRole().name());
 
-            // 🔹 Redirection selon le rôle
+            // Redirection selon le rôle
             switch (user.getRole()) {
                 case INFIRMIER:
                     res.sendRedirect(req.getContextPath() + "/dashboard-infermier");
