@@ -37,8 +37,23 @@ public class DemandeExpertiseService {
                           .collect(Collectors.toList());
     }
 
-    // Sauvegarder une nouvelle demande d'expertise
-// Sauvegarder une nouvelle demande d'expertise ou mettre à jour une existante
+    //Claculter tout les demandes d'expertise d'un spécialiste
+   public Long totalDemandeSpecialiste(Long specialisteId){
+       Long total=demandeRepo.findAllBySpecialisteId(specialisteId).stream().count();
+       return total;
+   }
+
+    //Claculter de revenu d'un spécialiste
+    public Double revenuSpecialiste(Long specialisteId){
+        Double revenu=demandeRepo.findAllBySpecialisteId(specialisteId).stream()
+                .filter(d->d.getStatut().equals(StatutExpertise.TERMINEE))
+                .mapToDouble(d->d.getTarif())
+                .sum();
+        return revenu;
+    }
+
+
+   // Sauvegarder une nouvelle demande d'expertise ou mettre à jour une existante
     public void saveDemande(DemandeExpertise demande) {
         // Vérifier que la consultation existe
         Consultation consultation = consultationRepo.findById(demande.getConsultation().getId());

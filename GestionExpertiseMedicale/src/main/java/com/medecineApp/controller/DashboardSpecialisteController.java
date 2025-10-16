@@ -34,11 +34,14 @@ public class DashboardSpecialisteController extends HttpServlet {
         // Fetch the time slots for the connected specialist
         List<Creneau> creneaux = creneauService.getCreneauxBySpecialiste(user.getId());
         List<DemandeExpertise> demandes=demandeExpertise.getNowDemandesBySpecialisteId(user.getId());
-
+        Long total= demandeExpertise.totalDemandeSpecialiste(user.getId());
+        double revenu=demandeExpertise.revenuSpecialiste(user.getId());
         // Pass the user and time slots to the JSP
         req.setAttribute("user", user);
         req.setAttribute("creneaux", creneaux);
         req.setAttribute("demandes",demandes);
+        req.setAttribute("total",total);
+        req.setAttribute("revenu",revenu);
         req.getRequestDispatcher("/pages/dashboard-specialiste.jsp").forward(req, resp);
     }
 }
