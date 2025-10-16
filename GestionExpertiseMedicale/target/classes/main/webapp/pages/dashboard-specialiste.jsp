@@ -40,22 +40,19 @@
     <div class="flex">
         <aside class="w-64 bg-white border-r border-gray-200 min-h-screen p-4">
             <nav class="space-y-2">
-                <a href="#" onclick="showSection('creneaux')" id="nav-creneaux" class="flex items-center gap-3 px-4 py-3 bg-teal-600 text-white rounded-lg font-medium">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg" onclick="showSection('creneaux')">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
                     Mes Créneaux
                 </a>
-                <a href="#" onclick="showSection('demandes')" id="nav-demandes" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg relative">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg" onclick="showSection('expertises')">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                     Demandes d'Expertise
-                    <c:if test="${not empty demandes && demandes.size() > 0}">
-                        <span class="absolute right-3 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">${demandes.size()}</span>
-                    </c:if>
                 </a>
-                <a href="#" onclick="showSection('statistiques')" id="nav-statistiques" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                     </svg>
@@ -65,10 +62,9 @@
         </aside>
 
         <main class="flex-1 p-6">
-            <!-- Section Créneaux -->
-            <div id="section-creneaux" class="section-content">
+            <div id="creneauxSection">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-semibold text-gray-900">Mes Créneaux de Consultation</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900" id="pageTitle">Mes Créneaux de Consultation</h2>
                     <div class="flex gap-3">
                         <button onclick="openModal('add')" class="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-colors">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,6 +75,7 @@
                     </div>
                 </div>
 
+                <!-- Liste des créneaux par semaine -->
                 <div class="bg-white rounded-lg border border-gray-200 p-6">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Créneaux par semaine</h3>
                     <c:choose>
@@ -92,7 +89,7 @@
                                         <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Jour</th>
                                         <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Heure début</th>
                                         <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Heure fin</th>
-                                        <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Disponibilité</th>
+                                        <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Disponiblilité</th>
                                         <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Actions</th>
                                     </tr>
                                 </thead>
@@ -118,153 +115,43 @@
                 </div>
             </div>
 
-            <!-- Section Demandes d'Expertise -->
-            <div id="section-demandes" class="section-content hidden">
+            <div id="expertisesSection" class="hidden">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-semibold text-gray-900">Demandes d'Expertise</h2>
                 </div>
-
-                <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-900">Liste des demandes reçues</h3>
-                    </div>
-                    <c:choose>
-                        <c:when test="${empty demandes}">
-                            <div class="px-6 py-8 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                <p class="mt-2 text-gray-600">Aucune demande d'expertise pour le moment</p>
-                            </div>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="overflow-x-auto">
-                                <table class="w-full">
-                                    <thead class="bg-gray-50 border-b border-gray-200">
-                                        <tr>
-                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
-                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Motif</th>
-                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date demande</th>
-                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priorité</th>
-                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        <c:forEach var="demande" items="${demandes}">
-                                            <tr class="hover:bg-gray-50 transition-colors">
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="flex items-center gap-3">
-                                                        <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                                            ${demande.consultation.patient.prenom.charAt(0)}${demande.consultation.patient.nom.charAt(0)}
-                                                        </div>
-                                                        <div>
-                                                            <div class="text-sm font-medium text-gray-900">
-                                                                ${demande.consultation.patient.nom} ${demande.consultation.patient.prenom}
-                                                            </div>
-                                                            <div class="text-xs text-gray-500">${demande.consultation.patient.telephone}</div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <div class="text-sm text-gray-900">${demande.consultation.motif}</div>
-                                                    <div class="text-xs text-gray-500 mt-1">${demande.question}</div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900">
-                                                        <fmt:formatDate value="${demande.dateDemande}" pattern="dd/MM/yyyy HH:mm"/>
-                                                    </div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
-                                                        <c:choose>
-                                                            <c:when test="${demande.priorite == 4}">bg-red-100 text-red-800</c:when>
-                                                            <c:when test="${demande.priorite == 3}">bg-orange-100 text-orange-800</c:when>
-                                                            <c:when test="${demande.priorite == 2}">bg-green-100 text-green-800</c:when>
-                                                            <c:otherwise>bg-blue-100 text-blue-800</c:otherwise>
-                                                        </c:choose>">
-                                                        <c:choose>
-                                                            <c:when test="${demande.priorite == 4}">Urgente</c:when>
-                                                            <c:when test="${demande.priorite == 3}">Élevée</c:when>
-                                                            <c:when test="${demande.priorite == 2}">Normale</c:when>
-                                                            <c:otherwise>Faible</c:otherwise>
-                                                        </c:choose>
-                                                    </span>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
-                                                        <c:choose>
-                                                            <c:when test="${demande.statut == 'EN_ATTENTE'}">bg-yellow-100 text-yellow-800</c:when>
-                                                            <c:when test="${demande.statut == 'EN_COURS'}">bg-blue-100 text-blue-800</c:when>
-                                                            <c:when test="${demande.statut == 'TERMINEE'}">bg-green-100 text-green-800</c:when>
-                                                            <c:otherwise>bg-gray-100 text-gray-800</c:otherwise>
-                                                        </c:choose>">
-                                                        ${demande.statut}
-                                                    </span>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <button onclick="viewDemande(${demande.id})" class="text-teal-600 hover:text-teal-900 font-medium text-sm">
-                                                        Consulter
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </div>
-
-            <!-- Section Statistiques -->
-            <div id="section-statistiques" class="section-content hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-semibold text-gray-900">Statistiques</h2>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white rounded-lg border border-gray-200 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-600">Total Créneaux</p>
-                                <p class="text-3xl font-bold text-gray-900 mt-2">${creneaux.size()}</p>
-                            </div>
-                            <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-lg border border-gray-200 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-600">Demandes reçues</p>
-                                <p class="text-3xl font-bold text-gray-900 mt-2">${demandes.size()}</p>
-                            </div>
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-lg border border-gray-200 p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-600">Taux de réponse</p>
-                                <p class="text-3xl font-bold text-gray-900 mt-2">95%</p>
-                            </div>
-                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Liste des demandes d'expertise</h3>
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
+                                <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Patient</th>
+                                <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Date</th>
+                                <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Statut</th>
+                                <th class="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-gray-200 px-4 py-2">1</td>
+                                <td class="border border-gray-200 px-4 py-2">Jean Dupont</td>
+                                <td class="border border-gray-200 px-4 py-2">2025-10-15</td>
+                                <td class="border border-gray-200 px-4 py-2 text-yellow-600">En attente</td>
+                                <td class="border border-gray-200 px-4 py-2">
+                                    <a href="#" class="text-teal-600 hover:underline">Répondre</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-200 px-4 py-2">2</td>
+                                <td class="border border-gray-200 px-4 py-2">Marie Curie</td>
+                                <td class="border border-gray-200 px-4 py-2">2025-10-14</td>
+                                <td class="border border-gray-200 px-4 py-2 text-yellow-600">En attente</td>
+                                <td class="border border-gray-200 px-4 py-2">
+                                    <a href="#" class="text-teal-600 hover:underline">Répondre</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>
@@ -319,28 +206,6 @@
     </div>
 
     <script>
-        // Navigation entre sections
-        function showSection(sectionName) {
-            // Cacher toutes les sections
-            const sections = document.querySelectorAll('.section-content');
-            sections.forEach(section => section.classList.add('hidden'));
-
-            // Retirer la classe active de tous les liens
-            const navLinks = document.querySelectorAll('aside a');
-            navLinks.forEach(link => {
-                link.classList.remove('bg-teal-600', 'text-white');
-                link.classList.add('text-gray-700', 'hover:bg-gray-50');
-            });
-
-            // Afficher la section sélectionnée
-            document.getElementById('section-' + sectionName).classList.remove('hidden');
-
-            // Activer le lien de navigation correspondant
-            const activeNav = document.getElementById('nav-' + sectionName);
-            activeNav.classList.add('bg-teal-600', 'text-white');
-            activeNav.classList.remove('text-gray-700', 'hover:bg-gray-50');
-        }
-
         function openModal(action, id, dateJourActuelle, heureDebut, heureFin, disponible) {
             const modal = document.getElementById('creneauModal');
             const form = document.getElementById('creneauForm');
@@ -383,16 +248,27 @@
             document.getElementById('creneauForm').reset();
         }
 
-        function viewDemande(demandeId) {
-            // Rediriger vers la page de détail de la demande
-            window.location.href = 'demande-expertise?action=view&id=' + demandeId;
-        }
-
         // Fermer le modal en cliquant à l'extérieur
         window.onclick = function(event) {
             const modal = document.getElementById('creneauModal');
             if (event.target === modal) {
                 closeModal();
+            }
+        }
+
+        function showSection(section) {
+            const creneauxSection = document.getElementById('creneauxSection');
+            const expertisesSection = document.getElementById('expertisesSection');
+            const pageTitle = document.getElementById('pageTitle');
+
+            if (section === 'creneaux') {
+                creneauxSection.classList.remove('hidden');
+                expertisesSection.classList.add('hidden');
+                pageTitle.textContent = 'Mes Créneaux de Consultation';
+            } else if (section === 'expertises') {
+                creneauxSection.classList.add('hidden');
+                expertisesSection.classList.remove('hidden');
+                pageTitle.textContent = 'Demandes d\'Expertise';
             }
         }
     </script>
