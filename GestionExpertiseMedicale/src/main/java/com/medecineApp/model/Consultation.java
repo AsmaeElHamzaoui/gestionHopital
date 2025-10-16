@@ -2,6 +2,8 @@ package com.medecineApp.model;
 import com.medecineApp.enums.StatutConsultation;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "consultations")
@@ -33,6 +35,13 @@ public class Consultation {
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
+
+    @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ActeTechnique> actesTechniques = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DemandeExpertise> demandesExpertise = new ArrayList<>();
 
     // Constructeur par défaut
     public Consultation() {
