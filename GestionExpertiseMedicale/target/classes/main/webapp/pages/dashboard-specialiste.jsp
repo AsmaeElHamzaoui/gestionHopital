@@ -171,7 +171,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-600">nombre d'expertises</p>
-                                <p class="text-3xl font-bold text-gray-900 mt-2">245</p>
+                                <p class="text-3xl font-bold text-gray-900 mt-2">${total}</p>
                             </div>
                             <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                                 <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,7 +185,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-600">Revenu du Mois</p>
-                                <p class="text-3xl font-bold text-gray-900 mt-2">8,450€</p>
+                                <p class="text-3xl font-bold text-gray-900 mt-2">${revenu}</p>
                             </div>
                             <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
                                 <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

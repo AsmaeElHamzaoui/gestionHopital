@@ -14,9 +14,25 @@ import java.util.stream.Collectors;
 
 public class DemandeExpertiseService {
 
-    private final DemandeExpertiseRepository demandeRepo = new DemandeExpertiseRepository();
-    private final ConsultationRepository consultationRepo = new ConsultationRepository();
-    private final UserRepository userRepo = new UserRepository();
+    private final DemandeExpertiseRepository demandeRepo;
+    private final ConsultationRepository consultationRepo;
+    private final UserRepository userRepo;
+
+    // Constructeur pour l'injection de mocks en test
+    public DemandeExpertiseService(DemandeExpertiseRepository demandeRepo,
+                                   ConsultationRepository consultationRepo,
+                                   UserRepository userRepo) {
+        this.demandeRepo = demandeRepo;
+        this.consultationRepo = consultationRepo;
+        this.userRepo = userRepo;
+    }
+
+    // Constructeur par défaut pour la production
+    public DemandeExpertiseService() {
+        this.demandeRepo = new DemandeExpertiseRepository();
+        this.consultationRepo = new ConsultationRepository();
+        this.userRepo = new UserRepository();
+    }
 
     // Récupérer toutes les demandes d'expertise
     public List<DemandeExpertise> getAllDemandes() {
