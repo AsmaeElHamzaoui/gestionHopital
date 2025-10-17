@@ -9,28 +9,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 font-sans">
-    <header class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-emerald-500 rounded flex items-center justify-center text-white font-bold">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-            </div>
-            <div>
-                <h1 class="text-lg font-semibold text-gray-900">Télé-Expertise Médicale</h1>
-                <p class="text-xs text-gray-500">Maison Générale</p>
-            </div>
+<header class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-emerald-500 rounded flex items-center justify-center text-white font-bold">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
         </div>
-        <div class="flex items-center gap-3">
-            <img src="/placeholder.svg?height=40&width=40" alt="Dr Martin Dubois" class="w-10 h-10 rounded-full">
-            <span class="text-sm font-medium text-gray-700">Dr Martin Dubois</span>
-            <button class="text-gray-400 hover:text-gray-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                </svg>
-            </button>
+        <div>
+            <h1 class="text-lg font-semibold text-gray-900">Télé-Expertise Médicale</h1>
+            <p class="text-xs text-gray-500">Maison Générale</p>
         </div>
-    </header>
+    </div>
+    <div class="flex items-center gap-3">
+        <img src="/placeholder.svg?height=40&width=40" alt="Dr Martin Dubois" class="w-10 h-10 rounded-full">
+        <span class="text-sm font-medium text-gray-700">Dr Martin Dubois</span>
+        <!-- Lien de déconnexion -->
+        <a href="${pageContext.request.contextPath}/logout"
+           class="text-gray-400 hover:text-gray-600 flex items-center gap-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            Déconnexion
+        </a>
+    </div>
+</header>
 
     <div class="flex h-[calc(100vh-73px)]">
         <aside class="w-64 bg-gradient-to-b from-emerald-700 to-emerald-800 text-white p-4">
